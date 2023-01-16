@@ -1,0 +1,27 @@
+{
+  "name": "fundamentals",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/pg": "^8.6.6",
+    "axios": "^1.2.2",
+    "chalk": "^4.1.2",
+    "commander": "^10.0.0",
+    "figlet": "^1.5.2",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/commander": "^2.12.2",
+    "@types/figlet": "^1.5.5",
+    "@types/node": "^18.11.18"
+  }
+}
