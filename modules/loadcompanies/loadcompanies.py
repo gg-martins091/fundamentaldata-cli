@@ -6,17 +6,16 @@ import psycopg2
 import psycopg2.extras
 from services.pg import conn
 from services.log import log
-from time import sleep
 from rich.progress import Progress, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn, MofNCompleteColumn, SpinnerColumn
 
 def m_loadcompanies():
-    # log.info(":hourglass: Loading companies")
+    log.info(":hourglass: Loading companies")
 
-    # r = api.get('companies')
-    # companies = r.json()
-    # m_upsert_companies(companies)
-    # api_sleep()
-    # log.info(":white_check_mark: Companies loaded successfully")
+    r = api.get('companies')
+    companies = r.json()
+    m_upsert_companies(companies)
+    api_sleep()
+    log.info(":white_check_mark: Companies loaded successfully")
 
 
     m_upsert_tickers()
@@ -68,7 +67,6 @@ def m_upsert_companies(companies):
     finally:
         if conn is not None:
             conn.rollback()
-            cur.close()
 
 
 def m_upsert_tickers():
