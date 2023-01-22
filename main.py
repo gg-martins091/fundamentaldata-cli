@@ -1,11 +1,14 @@
 from modules.getinfos.getinfos import m_getinfos
-from mytypes.indicators import MarketRatioIndicator, MarketRatioIndicatorColumns
+from modules.plots.marketratio import m_create_marketratio_df
+from modules.plots.ratio import m_create_ratio_df
+from mytypes.indicators import MarketRatioIndicator, MarketRatioIndicatorColumns, RatioIndicator, RatioIndicatorColumns, AllIndicators, AllIndicatorsColumns
 from mytypes.mytypes import InfoType
 from modules.loadcompanies.loadcompanies import m_loadcompanies
 import typer
+from rich.console import Console
 from rich.progress import Progress, TextColumn, BarColumn, TaskProgressColumn, TimeRemainingColumn, MofNCompleteColumn, SpinnerColumn
 from services.pg import conn
-from services.utils import get_cvm_code
+from services.utils import get_cvm_code, get_layout
 from services.log import log
 import psycopg2.extras
 import matplotlib.pyplot as plt
@@ -21,6 +24,34 @@ from rich.table import Table
 import time
 from rich import print
 from rich.layout import Layout
+
+console = Console()
+
+#prompt-toolkit
+from prompt_toolkit import PromptSession
+from prompt_toolkit.eventloop.inputhook import set_eventloop_with_inputhook
+from prompt_toolkit.history import FileHistory
+from prompt_toolkit.formatted_text import HTML
+from prompt_toolkit.styles import Style
+
+def inputhook(inputhook_context):
+    while not inputhook_context.input_is_ready():
+        try:
+            plt.pause(0.1)
+        except Exception as exp:
+            log.exception("%s", type(exp).__name__)
+            continue
+    return False
+
+
+# history_file = os.path.join(os.path.expanduser("~"), ".fundamentals.his")
+
+session = PromptSession(
+    history=FileHistory("./.history")
+)
+set_eventloop_with_inputhook(inputhook)
+
+#prompt-toolkit
 
 layout = Layout()
 app = typer.Typer()
@@ -58,75 +89,60 @@ def getinfos(infotype: InfoType, tickers: List[str]):
 def marketratio(indicators: List[MarketRatioIndicator], price: bool = False):
     tickers = prompt.Prompt.ask("Tickers ")
     tickers = tickers.upper().split(' ')
-    start_time = datetime.datetime(2020, 10, 1)
-    # end_time = datetime.datetime(2018, 6, 20)
-    today = datetime.datetime.now().date().isoformat()
-    dates = pd.date_range(start_time, today)
-    df = pd.DataFrame(index=dates)
-
-    if len(indicators) == 1 and indicators[0] == "all":
-        indicators = [i for i in MarketRatioIndicator if i != "all"]
-
-
-
-    with Progress(SpinnerColumn(),
-        TextColumn("[progress.description]{task.description}"),
-        MofNCompleteColumn(),
-        BarColumn(),
-        TaskProgressColumn(),
-        TimeRemainingColumn(),
-        transient=True,
-    ) as progress:
-        task = progress.add_task(f"[cyan] Loading data: ", total=len(tickers) -1)
-        for ticker in tickers:
-            all_indicators = ' '.join([f'{MarketRatioIndicatorColumns[i]} as "{ticker}_{MarketRatioIndicatorColumns[i]}",' for i in indicators])
-            only_aliases = [f"{ticker}_{MarketRatioIndicatorColumns[i]}" for i in indicators]
-            print(f"""
-                SELECT DISTINCT reference_date, {all_indicators} price as "{ticker}" FROM market_ratios mr
-                INNER JOIN tickers t on t.cvm_code = mr.cvm_code and t.ticker = mr.ticker
-                WHERE t.ticker = '{ticker}'
-            """, conn)
-            dfquery = sqlio.read_sql_query(f"""
-                SELECT DISTINCT reference_date, {all_indicators} price as "{ticker}" FROM market_ratios mr
-                INNER JOIN tickers t on t.cvm_code = mr.cvm_code and t.ticker = mr.ticker
-                WHERE t.ticker = '{ticker}'
-            """, conn)
-            dfquery = dfquery.reset_index()
-            dfquery.set_index('reference_date', inplace=True, drop=False)
-
-            df = df.join(dfquery[only_aliases + ([ticker] if price else [])])
-            progress.update(task, advance=1)
-
+    df = m_create_marketratio_df(indicators, tickers, price)
     df = df.dropna()
     ax = df.plot(title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
-    ax.set_xlabel("Date")
-    # ax.set_ylabel(indicator)
-    
     mplcursors.cursor(ax)
-    # plt.title('Relative price change')
-    # plt.legend(loc='upper left', fontsize=12)
-    plt.tight_layout()
-    plt.style.use('bmh')
-    plt.grid(True)
-    plt.show(block=False)
-    plt.pause(1)
-    with Live(layout, refresh_per_second=4, screen=True):  # update 4 times a second to feel fluid
-        print(layout.tree)
-        # prompt.Prompt.ask("eai")
-        # for row in range(12):
-        #     time.sleep(0.4)  # arbitrary delay
-        #     # update the renderable internally
-        #     table.add_row(f"{row}", f"description {row}", "[red]ERROR")
+    plt.show()
+
+
+@app.command()
+def ratio(indicators: List[RatioIndicator], price: bool = False):
+    tickers = prompt.Prompt.ask("Tickers ")
+    tickers = tickers.upper().split(' ')
+    df = m_create_ratio_df(indicators, tickers, price)
+    ax = df.plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for a in ax:
+        mplcursors.cursor(a)
 
     plt.show()
-    # plt.title(indicator)
-    # plt.savefig(f'{"_".join(tickers)}.pdf')
 
-    # plt.show()
 
-    # matplotlib.use('TkAgg')
+@app.command()
+def plot(indicators: List[AllIndicators], price: bool = False):
 
-    # plt.show()
+    # TODO: prompt pra saber quais types e quais indicators vai querer, alem dos tickers claro
+    # TODO: criar as funcoes de criacao de df de incomes, balances e cashflows
+    marketratioindicators = ('pl','pvp','pcf',)
+    dff = m_create_marketratio_df(marketratioindicators, tickers, False)
+    bx = dff.plot(subplots=True, layout=(get_layout(len(tickers),len(marketratioindicators))), title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for b in bx:
+        mplcursors.cursor(b)
+
+@app.command()
+def terminal():
+    console.clear()
+    ret = 1
+    while ret:
+        an_input = session.prompt(
+            f"fundamentals / > ",
+            # completer=t_controller.completer,
+            search_ignore_case=True,
+            bottom_toolbar=HTML(
+                '<style bg="ansiblack" fg="ansiwhite">[h]</style> help menu    '
+                '<style bg="ansiblack" fg="ansiwhite">[q]</style> return to previous menu    '
+                '<style bg="ansiblack" fg="ansiwhite">[e]</style> exit terminal    '
+                '<style bg="ansiblack" fg="ansiwhite">[cmd -h]</style> '
+                "see usage and available options    "
+                '<style bg="ansiblack" fg="ansiwhite">[about]</style> Getting Started Documentation'
+            ),
+            style=Style.from_dict(
+                {
+                    "bottom-toolbar": "#ffffff bg:#333333",
+                }
+            ),
+        )
+        print(an_input)
 
 if __name__ == "__main__":
     app()

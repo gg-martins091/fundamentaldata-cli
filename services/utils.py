@@ -2,6 +2,7 @@ from services.log import log
 import random
 from time import sleep
 from .pg import conn
+import math
 
 def api_sleep(is_retry = False):
     t = random.uniform(1.5, 2.8)
@@ -25,3 +26,9 @@ def get_cvm_code(ticker: str):
 
     return res[0]
 
+def get_layout(tickers, indicators):
+
+    if tickers == 1:
+        return (3, math.ceil(indicators / 3))
+
+    return (tickers, indicators)

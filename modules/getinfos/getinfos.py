@@ -8,11 +8,19 @@ from services.log import log
 from services.utils import api_sleep, get_cvm_code
 from services.http import api
 
+Parameters = {
+    "balances": "",
+    "incomes": "?period_type=quarter",
+    "cashflows": "?period_type=quarter",
+    "marketratios": "?period_type=quarter",
+    "ratios": ""
+}
+
 def m_getinfos(infotype: InfoType, ticker: str):
     log.info(f":hourglass: Loading {infotype}")
 
     cvm_code = get_cvm_code(ticker)
-    r = api.get(f'companies/{cvm_code}/{endpoints[infotype]}?period_type=quarter')
+    r = api.get(f'companies/{cvm_code}/{endpoints[infotype]}{Parameters[infotype]}')
     infos = r.json()
     m_upsert_info(infos, endpoints[infotype], ticker)
     api_sleep()
