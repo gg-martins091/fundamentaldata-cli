@@ -1,7 +1,9 @@
 from modules.getinfos.getinfos import m_getinfos
+from modules.plots.income import m_create_income_df
 from modules.plots.marketratio import m_create_marketratio_df
 from modules.plots.ratio import m_create_ratio_df
-from mytypes.indicators import MarketRatioIndicator, MarketRatioIndicatorColumns, RatioIndicator, RatioIndicatorColumns, AllIndicators, AllIndicatorsColumns
+from modules.plots.balance import m_create_balance_df
+from mytypes.indicators import BalanceIndicator, IncomeIndicator, MarketRatioIndicator, MarketRatioIndicatorColumns, RatioIndicator, RatioIndicatorColumns, AllIndicators, AllIndicatorsColumns, IncomeIndicator, BalanceIndicator
 from mytypes.mytypes import InfoType
 from modules.loadcompanies.loadcompanies import m_loadcompanies
 import typer
@@ -107,17 +109,58 @@ def ratio(indicators: List[RatioIndicator], price: bool = False):
 
     plt.show()
 
+@app.command()
+def income(indicators: List[IncomeIndicator], price: bool = False):
+    tickers = prompt.Prompt.ask("Tickers ")
+    tickers = tickers.upper().split(' ')
+    df = m_create_income_df(indicators, tickers, price)
+    ax = df.plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for a in ax:
+        mplcursors.cursor(a)
+
+    plt.show()
 
 @app.command()
-def plot(indicators: List[AllIndicators], price: bool = False):
+def balance(indicators: List[BalanceIndicator], price: bool = False):
+    tickers = prompt.Prompt.ask("Tickers ")
+    tickers = tickers.upper().split(' ')
+    df = m_create_balance_df(indicators, tickers, price)
+    ax = df.plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for a in ax:
+        mplcursors.cursor(a)
+
+    plt.show()
+
+@app.command()
+def plot(tickers: List[str], price: bool = False):
 
     # TODO: prompt pra saber quais types e quais indicators vai querer, alem dos tickers claro
     # TODO: criar as funcoes de criacao de df de incomes, balances e cashflows
+    ratioindicators = ('nm','em','roe','cl','ql','wc','gd','nd','td')
+    dfratio = m_create_ratio_df(ratioindicators, tickers, False)
+    ratiox = dfratio.plot(subplots=True, layout=(get_layout(len(tickers),len(ratioindicators))), title='ratios', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for rx in ratiox:
+        mplcursors.cursor(rx)
+
+    incomeindicators = ('ns', 'costs', 'gi', 'ebit', 'taxes', 'ni')
+    dfincome = m_create_income_df(incomeindicators, tickers, False)
+    incomex = dfincome.plot(subplots=True, layout=(get_layout(len(tickers),len(incomeindicators))), title='income', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for ix in incomex:
+        mplcursors.cursor(ix)
+
     marketratioindicators = ('pl','pvp','pcf',)
-    dff = m_create_marketratio_df(marketratioindicators, tickers, False)
-    bx = dff.plot(subplots=True, layout=(get_layout(len(tickers),len(marketratioindicators))), title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    marketratiodf = m_create_marketratio_df(marketratioindicators, tickers, False)
+    mrx = marketratiodf.plot(subplots=True, layout=(get_layout(len(tickers),len(marketratioindicators))), title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for mr in mrx:
+        mplcursors.cursor(mr)
+
+    balanceindicators = ('cash' ,'rec', 'inv', 'invest', 'assets', 'ca', 'nca', 'fa', 'lia', 'clia', 'ia', 'sup', 'loans', 'equity')
+    balancedf = m_create_balance_df(balanceindicators, tickers, False)
+    bx = balancedf.plot(subplots=True, layout=(get_layout(len(tickers),len(balanceindicators))), title='balance', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for b in bx:
         mplcursors.cursor(b)
+
+    plt.show()
 
 @app.command()
 def terminal():
