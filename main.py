@@ -93,7 +93,12 @@ def marketratio(indicators: List[MarketRatioIndicator], price: bool = False):
     tickers = tickers.upper().split(' ')
     df = m_create_marketratio_df(indicators, tickers, price)
     df = df.dropna()
-    ax = df.plot(title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    # o interpolate aqui faz com que, caso tenhamos 2 graficos, 
+    #um com dados desde 2010 e um desde 2015, o grafico que comeca 
+    #em 2015 ainda mostra 2010 ate 2015 sem linha nenhuma
+    #sem isso, todos os graficos comecariam quando o menor grafico comeca.
+    #nesse exemplo, ambos graficos comecariam em 2015.
+    ax = df.interpolate(method='linear').plot(title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     mplcursors.cursor(ax)
     plt.show()
 
@@ -103,7 +108,7 @@ def ratio(indicators: List[RatioIndicator], price: bool = False):
     tickers = prompt.Prompt.ask("Tickers ")
     tickers = tickers.upper().split(' ')
     df = m_create_ratio_df(indicators, tickers, price)
-    ax = df.plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    ax = df.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for a in ax:
         mplcursors.cursor(a)
 
@@ -114,7 +119,7 @@ def income(indicators: List[IncomeIndicator], price: bool = False):
     tickers = prompt.Prompt.ask("Tickers ")
     tickers = tickers.upper().split(' ')
     df = m_create_income_df(indicators, tickers, price)
-    ax = df.plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    ax = df.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for a in ax:
         mplcursors.cursor(a)
 
@@ -125,7 +130,7 @@ def balance(indicators: List[BalanceIndicator], price: bool = False):
     tickers = prompt.Prompt.ask("Tickers ")
     tickers = tickers.upper().split(' ')
     df = m_create_balance_df(indicators, tickers, price)
-    ax = df.plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    ax = df.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for a in ax:
         mplcursors.cursor(a)
 
@@ -138,28 +143,37 @@ def plot(tickers: List[str], price: bool = False):
     # TODO: criar as funcoes de criacao de df de incomes, balances e cashflows
     ratioindicators = ('nm','em','roe','cl','ql','wc','gd','nd','td')
     dfratio = m_create_ratio_df(ratioindicators, tickers, False)
-    ratiox = dfratio.plot(subplots=True, layout=(get_layout(len(tickers),len(ratioindicators))), title='ratios', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    ratiox = dfratio.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(ratioindicators))), title='ratios', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for rx in ratiox:
         mplcursors.cursor(rx)
 
     incomeindicators = ('ns', 'costs', 'gi', 'ebit', 'taxes', 'ni')
     dfincome = m_create_income_df(incomeindicators, tickers, False)
-    incomex = dfincome.plot(subplots=True, layout=(get_layout(len(tickers),len(incomeindicators))), title='income', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    incomex = dfincome.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(incomeindicators))), title='income', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for ix in incomex:
         mplcursors.cursor(ix)
 
     marketratioindicators = ('pl','pvp','pcf',)
     marketratiodf = m_create_marketratio_df(marketratioindicators, tickers, False)
-    mrx = marketratiodf.plot(subplots=True, layout=(get_layout(len(tickers),len(marketratioindicators))), title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    mrx = marketratiodf.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(marketratioindicators))), title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for mr in mrx:
         mplcursors.cursor(mr)
 
-    balanceindicators = ('cash' ,'rec', 'inv', 'invest', 'assets', 'ca', 'nca', 'fa', 'lia', 'clia', 'ia', 'sup', 'loans', 'equity')
+    #balance +
+    balanceindicators = ('cash', 'inv', 'invest', 'assets', 'ca', 'nca', 'fa', 'equity')
     balancedf = m_create_balance_df(balanceindicators, tickers, False)
-    bx = balancedf.plot(subplots=True, layout=(get_layout(len(tickers),len(balanceindicators))), title='balance', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    bx = balancedf.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(balanceindicators))), title='balance o que tem', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for b in bx:
         mplcursors.cursor(b)
 
+    #balance -
+    balance2indicators = ('lia', 'clia', 'ia', 'sup', 'loans')
+    balance2df = m_create_balance_df(balance2indicators, tickers, False)
+    bxx = balance2df.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(balance2indicators))), title='balance devedor', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
+    for bb in bxx:
+        mplcursors.cursor(bb)
+
+    plt.tight_layout()
     plt.show()
 
 @app.command()

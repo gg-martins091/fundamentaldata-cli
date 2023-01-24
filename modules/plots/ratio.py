@@ -46,6 +46,6 @@ def m_create_ratio_df(indicators, tickers, price):
             df = df.join(dfquery[only_aliases + ([ticker] if price else [])])
             progress.update(task, advance=1)
 
-    df = df.dropna()
+    # df = df.fillna(0)
 
     return df

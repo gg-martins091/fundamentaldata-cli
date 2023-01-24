@@ -11,7 +11,7 @@ def m_create_marketratio_df(indicators, tickers, price):
     start_time = datetime.datetime(2015, 10, 1)
     # end_time = datetime.datetime(2018, 6, 20)
     today = datetime.datetime.now().date().isoformat()
-    dates = pd.date_range(start_time, today)
+    dates = pd.date_range(start_time, today, freq='Q')
     df = pd.DataFrame(index=dates)
 
     if len(indicators) == 1 and indicators[0] == "all":
@@ -40,5 +40,5 @@ def m_create_marketratio_df(indicators, tickers, price):
             df = df.join(dfquery[only_aliases + ([ticker] if price else [])])
             progress.update(task, advance=1)
 
-    df = df.dropna()
+    # df = df.fillna(0)
     return df
