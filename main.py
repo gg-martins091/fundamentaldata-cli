@@ -141,24 +141,28 @@ def plot(tickers: List[str], price: bool = False):
 
     # TODO: prompt pra saber quais types e quais indicators vai querer, alem dos tickers claro
     # TODO: criar as funcoes de criacao de df de incomes, balances e cashflows
+    plt.tight_layout()
     ratioindicators = ('nm','em','roe','cl','ql','wc','gd','nd','td')
     dfratio = m_create_ratio_df(ratioindicators, tickers, False)
     ratiox = dfratio.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(ratioindicators))), title='ratios', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for rx in ratiox:
         mplcursors.cursor(rx)
 
+    plt.tight_layout()
     incomeindicators = ('ns', 'costs', 'gi', 'ebit', 'taxes', 'ni')
     dfincome = m_create_income_df(incomeindicators, tickers, False)
     incomex = dfincome.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(incomeindicators))), title='income', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for ix in incomex:
         mplcursors.cursor(ix)
 
+    plt.tight_layout()
     marketratioindicators = ('pl','pvp','pcf',)
     marketratiodf = m_create_marketratio_df(marketratioindicators, tickers, False)
     mrx = marketratiodf.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(marketratioindicators))), title='market ratio', fontsize=12, figsize=(20, 10), secondary_y=tickers if price else None)
     for mr in mrx:
         mplcursors.cursor(mr)
 
+    plt.tight_layout()
     #balance +
     balanceindicators = ('cash', 'inv', 'invest', 'assets', 'ca', 'nca', 'fa', 'equity')
     balancedf = m_create_balance_df(balanceindicators, tickers, False)
@@ -166,6 +170,7 @@ def plot(tickers: List[str], price: bool = False):
     for b in bx:
         mplcursors.cursor(b)
 
+    plt.tight_layout()
     #balance -
     balance2indicators = ('lia', 'clia', 'ia', 'sup', 'loans')
     balance2df = m_create_balance_df(balance2indicators, tickers, False)
