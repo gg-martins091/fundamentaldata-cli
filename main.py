@@ -1,9 +1,11 @@
 from modules.getinfos.getinfos import m_getinfos
+from modules.plots.gringos import m_create_gringos_df
 from modules.plots.income import m_create_income_df
 from modules.plots.marketratio import m_create_marketratio_df
 from modules.plots.ratio import m_create_ratio_df
+from modules.plots.cashflow import m_create_cashflow_df
 from modules.plots.balance import m_create_balance_df
-from mytypes.indicators import BalanceIndicator, IncomeIndicator, MarketRatioIndicator, MarketRatioIndicatorColumns, RatioIndicator, RatioIndicatorColumns, AllIndicators, AllIndicatorsColumns, IncomeIndicator, BalanceIndicator
+from mytypes.indicators import BalanceIndicator, CashflowIndicator, IncomeIndicator, MarketRatioIndicator, MarketRatioIndicatorColumns, RatioIndicator, RatioIndicatorColumns, AllIndicators, AllIndicatorsColumns, IncomeIndicator, BalanceIndicator, CashflowIndicator
 from mytypes.mytypes import InfoType
 from modules.loadcompanies.loadcompanies import m_loadcompanies
 import typer
@@ -179,6 +181,32 @@ def plot(tickers: List[str], price: bool = False):
         mplcursors.cursor(bb)
 
     plt.tight_layout()
+    plt.show()
+
+@app.command()
+def gringos():
+    df = m_create_gringos_df()
+    fig,ax = plt.subplots()
+    ax.bar(df.index, df['flow'], label="flow")
+    ax.plot(df.index, df['sum'], color="green")
+    ax.set_xticklabels(df.index)
+    
+    # ax = df[['date','sum']].plot(use_index=False, x='date', kind='line', title='fluxo gringo', fontsize=12, figsize=(20, 10))
+    # df[['date','flow']].plot(x='date', kind='bar',ax=ax)
+    mplcursors.cursor(ax)
+
+    plt.tight_layout()
+    plt.show()
+
+@app.command()
+def cashflow(indicators: List[CashflowIndicator]):
+    tickers = prompt.Prompt.ask("Tickers ")
+    tickers = tickers.upper().split(' ')
+    df = m_create_cashflow_df(indicators, tickers)
+    ax = df.interpolate(method='linear').plot(subplots=True, layout=(get_layout(len(tickers),len(indicators))), title='ratio', fontsize=12, figsize=(20, 10))
+    for a in ax:
+        mplcursors.cursor(a)
+
     plt.show()
 
 @app.command()

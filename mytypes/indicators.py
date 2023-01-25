@@ -191,3 +191,14 @@ BalanceIndicatorColumns = {
     "equity" : "equity",
     "enc" : "equity_non_controlling"
 }
+
+class CashflowIndicator(str, Enum):
+    operating = "operating"
+    investing = "investing"
+    financing = "financing"
+
+CashflowIndicatorColumns = {
+    "operating" : "operating",
+    "financing" : "financing",
+    "investing" : "investing",
+}
