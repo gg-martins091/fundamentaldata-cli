@@ -35,13 +35,6 @@ class CointegrationAnalyzer:
         # Run cointegration test
         self.is_cointegrated, self.p_value = self.test_cointegration()
         
-        if not self.is_cointegrated:
-            return {
-                'is_cointegrated': False,
-                'p_value': self.p_value,
-                'message': 'Series are not cointegrated'
-            }
-            
         # Calculate spread and z-score
         self.spread = self.calculate_spread()
         self.zscore = self.calculate_zscore()
@@ -100,6 +93,13 @@ class CointegrationAnalyzer:
         Returns:
             Dictionary containing summary statistics
         """
+        if not self.is_cointegrated:
+            return {
+                'is_cointegrated': False,
+                'p_value': self.p_value,
+                'message': 'Series are not cointegrated'
+            }
+
         return {
             'is_cointegrated': self.is_cointegrated,
             'p_value': self.p_value,
@@ -133,6 +133,9 @@ class CointegrationAnalyzer:
         Args:
             show_signals: Whether to show trading signal zones
         """
+        self.plot_residuals()
+        return
+        
         if not self.is_cointegrated:
             plt.figure(figsize=(10, 6))
             plt.plot(self.series1, label=self.names[0])
@@ -165,4 +168,32 @@ class CointegrationAnalyzer:
         ax3.set_title("Z-Score")
         
         plt.tight_layout()
+        plt.show()
+
+    def plot_residuals(self) -> None:
+        """
+        Plot the residuals (spread) with mean and ±2σ bands.
+        Shows trading signal thresholds and mean-reversion visualization.
+        """
+        if self.spread is None:
+            print("Cannot plot residuals: Series not analyzed")
+            return
+            
+        plt.figure(figsize=(12, 6))
+        
+        # Plot residuals
+        plt.plot(self.spread, color='black', label='Residuals')
+        
+        # Plot mean line
+        mean = self.spread.mean()
+        plt.axhline(y=mean, color='red', linestyle='--', label='Mean')
+        
+        # Plot ±2σ bands
+        std = self.spread.std()
+        plt.axhline(y=mean + 2*std, color='blue', linestyle='--', label='±2σ Bands')
+        plt.axhline(y=mean - 2*std, color='blue', linestyle='--')
+        
+        plt.title(f"Residuals Analysis: {self.names[0]} vs {self.names[1]}")
+        plt.legend()
+        plt.grid(True, alpha=0.3)
         plt.show() 

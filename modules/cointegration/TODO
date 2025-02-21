@@ -1,0 +1,10 @@
+Entender pq o teste esta dando sempre nao cointegrado.
+Fazer a analise de cointegração com diferentes intervalos de tempo.
+Adicionar a visualização do dickey fuller (teste de raiz unitária, quanto menor melhor)
+Adicionar o grafico do historico do beta para visualizar a volatilidade relativa entre os ativos e a volatilidade do proprio beta.
+Informacoes interessantes para entender e colocar na visualizacao:
+    cointegracao (porcentagem)
+    coeficiente angular
+    fisher information (o que é isso?)
+
+
