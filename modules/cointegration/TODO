@@ -1,7 +1,7 @@
 #Entender pq o teste esta dando sempre nao cointegrado.
 Resolver o problema no test_cointegration:
     analyze_all_pairs e analyze_pair_periods dao resultados diferentes para o mesmo par.
-
+    entender pq quando roda analyze_pair_periods de embr3 e rent3 vai de 09-02 ate 02-25 e dps qnd roda o all_pairs roda 06-02 ate 02-25 e dps 09-02 ate 02-25 e entender tambem qual a diferenca disso
 Fazer a analise de cointegração com diferentes intervalos de tempo.
 Adicionar a visualização do dickey fuller (teste de raiz unitária, quanto menor melhor)
 Adicionar o grafico do historico do beta para visualizar a volatilidade relativa entre os ativos e a volatilidade do proprio beta.

@@ -33,8 +33,8 @@ class CointegrationAnalyzer:
             Dictionary containing analysis results
         """
 
-        # print(f"series1: {self.series1}")   
-        # print(f"series2: {self.series2}")
+        print(f"series1 ({self.names[0]}): {self.series1}")   
+        print(f"series2 ({self.names[1]}): {self.series2}")
         # self.series1.iloc[::-1].to_csv('series1.csv')
         # self.series2.iloc[::-1].to_csv('series2.csv')
         # Run cointegration test
@@ -58,7 +58,7 @@ class CointegrationAnalyzer:
         # Run Dickey-Fuller test on spread
         spread = self.calculate_spread()
         adf_result = adfuller(spread)
-        print("\nAugmented Dickey-Fuller Test Results:")
+        print(f"\nAugmented Dickey-Fuller Test Results: ({self.names[0]} vs {self.names[1]})")
         print(f"ADF Statistic: {adf_result[0]}")
         print(f"P-value: {adf_result[1]}")
         print("Critical values:")
@@ -67,7 +67,7 @@ class CointegrationAnalyzer:
         
         # Run cointegration test
         coint_t, p_value, crit_value = coint(self.series1, self.series2)
-        print(f"\nCointegration Test Results:")
+        print(f"\nCointegration Test Results: ({self.names[0]} vs {self.names[1]})")
         print(f"Cointegration t-stat: {coint_t}")
         print(f"P-value: {p_value}")
         print(f"Critical values: {crit_value}")

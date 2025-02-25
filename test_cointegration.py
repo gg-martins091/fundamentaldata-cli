@@ -203,34 +203,34 @@ if __name__ == "__main__":
         os.makedirs('data')
     
     # Example of multi-period analysis with extended lookback
-    analyze_pair_periods('RENT3.SA', 'EMBR3.SA', 
+    analyze_pair_periods('EMBR3.SA', 'RENT3.SA', 
                         end='2025-02-25',
                         periods=[120],
                         lookback_days=250)  # Look back 250 days but analyze windows of 120 and 160 days
-    plt.show()
+    # plt.show()
     
     # List of stocks to analyze
-    # brazilian_stocks = [
-    #     'VALE3.SA',
-    #     'PETR4.SA',
-    #     'ITUB4.SA',
-    #     'BBAS3.SA',
-    #     'B3SA3.SA',
-    #     'LREN3.SA',
-    #     'WEGE3.SA',
-    #     'ELET3.SA',
-    #     'ABEV3.SA',
-    #     'CSAN3.SA',
-    #     'EMBR3.SA',
-    #     'RENT3.SA'
-    # ]
+    brazilian_stocks = [
+        # 'VALE3.SA',
+        # 'PETR4.SA',
+        # 'ITUB4.SA',
+        # 'BBAS3.SA',
+        # 'B3SA3.SA',
+        # 'LREN3.SA',
+        # 'WEGE3.SA',
+        # 'ELET3.SA',
+        # 'ABEV3.SA',
+        # 'CSAN3.SA',
+        'EMBR3.SA',
+        'RENT3.SA'
+    ]
     
-    # # Analyze all possible pairs without plotting
-    # analyze_all_pairs(
-    #     stocks=brazilian_stocks,
-    #     end='2025-02-25',
-    #     periods=[120],
-    #     lookback_days=250,
-    #     plot_charts=True  # Set to True if you want to see the charts
-    # )
-    # plt.show() 
+    # Analyze all possible pairs without plotting
+    analyze_all_pairs(
+        stocks=brazilian_stocks,
+        end='2025-02-25',
+        periods=[120],
+        lookback_days=250,
+        plot_charts=True  # Set to True if you want to see the charts
+    )
+    plt.show() 
