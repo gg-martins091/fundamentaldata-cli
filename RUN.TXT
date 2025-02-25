@@ -1,0 +1,1559 @@
+
+Analyzing all possible pairs from 12 stocks
+Total pairs to analyze: 66
+--------------------------------------------------
+Fetching stock data...
+ticker: VALE3.SA start: 2024-06-20 end: 2025-02-25
+Fetching VALE3.SA data from Yahoo Finance
+✓ VALE3.SA data fetched
+ticker: PETR4.SA start: 2024-06-20 end: 2025-02-25
+Fetching PETR4.SA data from Yahoo Finance
+✓ PETR4.SA data fetched
+ticker: ITUB4.SA start: 2024-06-20 end: 2025-02-25
+Fetching ITUB4.SA data from Yahoo Finance
+✓ ITUB4.SA data fetched
+ticker: BBAS3.SA start: 2024-06-20 end: 2025-02-25
+Fetching BBAS3.SA data from Yahoo Finance
+✓ BBAS3.SA data fetched
+ticker: B3SA3.SA start: 2024-06-20 end: 2025-02-25
+Fetching B3SA3.SA data from Yahoo Finance
+✓ B3SA3.SA data fetched
+ticker: LREN3.SA start: 2024-06-20 end: 2025-02-25
+Fetching LREN3.SA data from Yahoo Finance
+✓ LREN3.SA data fetched
+ticker: WEGE3.SA start: 2024-06-20 end: 2025-02-25
+Fetching WEGE3.SA data from Yahoo Finance
+✓ WEGE3.SA data fetched
+ticker: ELET3.SA start: 2024-06-20 end: 2025-02-25
+Fetching ELET3.SA data from Yahoo Finance
+✓ ELET3.SA data fetched
+ticker: ABEV3.SA start: 2024-06-20 end: 2025-02-25
+Fetching ABEV3.SA data from Yahoo Finance
+✓ ABEV3.SA data fetched
+ticker: CSAN3.SA start: 2024-06-20 end: 2025-02-25
+Fetching CSAN3.SA data from Yahoo Finance
+✓ CSAN3.SA data fetched
+ticker: EMBR3.SA start: 2024-06-20 end: 2025-02-25
+Fetching EMBR3.SA data from Yahoo Finance
+✓ EMBR3.SA data fetched
+ticker: RENT3.SA start: 2024-06-20 end: 2025-02-25
+Fetching RENT3.SA data from Yahoo Finance
+✓ RENT3.SA data fetched
+
+Analyzing VALE3.SA vs PETR4.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.757807679127233
+P-value: 0.06455795815593143
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -3.0446762249282973
+P-value: 0.09996396763180976
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.30905446792185404
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.2694
+Current Spread: 55.9308
+Current Z-Score: 2.3560
+Beta: -0.3091
+
+Analyzing VALE3.SA vs ITUB4.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.393051304849282
+P-value: 0.14370723905815463
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.4354978151734255
+P-value: 0.3082319418567373
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.22450168877188714
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.4773
+Current Spread: 19.5820
+Current Z-Score: 0.1686
+Beta: 0.2245
+
+Analyzing VALE3.SA vs BBAS3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.33763708757736
+P-value: 0.6117823143069864
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.1177558295599423
+P-value: 0.4670897005828527
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.001807222261562648
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.2769
+Current Spread: 27.7058
+Current Z-Score: 1.4139
+Beta: 0.0018
+
+Analyzing VALE3.SA vs B3SA3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.717079570806412
+P-value: 0.422334746798293
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.11057925664127
+P-value: 0.4708383330397079
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.008591737452155787
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.8070
+Current Spread: 10.3449
+Current Z-Score: 0.0079
+Beta: 0.0086
+
+Analyzing VALE3.SA vs LREN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.88117138210441
+P-value: 0.34096986333910695
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.365425084793058
+P-value: 0.3414003174471969
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.25597431965679884
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.6889
+Current Spread: -3.5518
+Current Z-Score: -1.6825
+Beta: 0.2560
+
+Analyzing VALE3.SA vs WEGE3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.8507528385134764
+P-value: 0.051381805062322344
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.1684717894072585
+P-value: 0.44067646567604846
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.2324557462583645
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.1833
+Current Spread: 64.9464
+Current Z-Score: -0.1802
+Beta: -0.2325
+
+Analyzing VALE3.SA vs ELET3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.14965726031188
+P-value: 0.2250213062614786
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.254997844860692
+P-value: 0.39621003252397435
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.23325408076099668
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.0731
+Current Spread: 23.6376
+Current Z-Score: 0.1249
+Beta: 0.2333
+
+Analyzing VALE3.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.031656397925348
+P-value: 0.2728676336246443
+Critical values:
+	1%: -3.4698858990744115
+	5%: -2.8789026251889647
+	10%: -2.5760266680839004
+
+Cointegration Test Results:
+Cointegration t-stat: -2.2202073499845225
+P-value: 0.41396877982535896
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.069047668140756
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.6512
+Current Spread: 7.0508
+Current Z-Score: -1.1126
+Beta: 0.0690
+
+Analyzing VALE3.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.7844468814001077
+P-value: 0.8236480427534432
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.3534565398043896
+P-value: 0.3472035301983144
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.552831381231575
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.7989
+Current Spread: -24.8997
+Current Z-Score: -2.4444
+Beta: 0.5528
+
+Analyzing VALE3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.1559336995720453
+P-value: 0.22262573009239928
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.6447829645468355
+P-value: 0.22006311757061842
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -1.5107206829373063
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 6.3232
+Current Spread: 146.9528
+Current Z-Score: 1.5579
+Beta: -1.5107
+
+Analyzing VALE3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.3327212605804304
+P-value: 0.1616317376850277
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -3.0298756620150007
+P-value: 0.10327370557079879
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.2013684793526158
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.0676
+Current Spread: -41.3649
+Current Z-Score: -2.6763
+Beta: 1.2014
+
+Analyzing PETR4.SA vs ITUB4.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.385766948294486
+P-value: 0.14579394439679422
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.0560062895877507
+P-value: 0.49937028662343913
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.2531749520324846
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.5607
+Current Spread: 42.1710
+Current Z-Score: 0.6525
+Beta: -0.2532
+
+Analyzing PETR4.SA vs BBAS3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.386715643765751
+P-value: 0.5886279765333485
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7358381949497184
+P-value: 0.6603320559964172
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.14654437035835752
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.2567
+Current Spread: 22.2237
+Current Z-Score: 1.0910
+Beta: 0.1465
+
+Analyzing PETR4.SA vs B3SA3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.8243165736244964
+P-value: 0.36845775379840473
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7921774553861631
+P-value: 0.633513977049644
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.059278228692590265
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.8021
+Current Spread: 13.0997
+Current Z-Score: 0.2280
+Beta: -0.0593
+
+Analyzing PETR4.SA vs LREN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.039528104277581
+P-value: 0.2695147268962783
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.0997214363396366
+P-value: 0.4765127897213663
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.24376814411423234
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.7997
+Current Spread: 20.4924
+Current Z-Score: -1.1656
+Beta: -0.2438
+
+Analyzing PETR4.SA vs WEGE3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.446492367542535
+P-value: 0.1290417722303579
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.45287010976257
+P-value: 0.7788174010289806
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.9736107372437676
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 3.9596
+Current Spread: 14.4360
+Current Z-Score: -0.9243
+Beta: 0.9736
+
+Analyzing PETR4.SA vs ELET3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.3410260052201757
+P-value: 0.15907734116850902
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.068600817414435
+P-value: 0.49278583084266714
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.3587707017601193
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.1047
+Current Spread: 50.7563
+Current Z-Score: 0.6377
+Beta: -0.3588
+
+Analyzing PETR4.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.264136752589246
+P-value: 0.18379550765131186
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7894920302606958
+P-value: 0.6348120394661558
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.02504618898027515
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.6790
+Current Spread: 11.9848
+Current Z-Score: -0.9493
+Beta: -0.0250
+
+Analyzing PETR4.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.763728675781354
+P-value: 0.06364456082308531
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -3.44926462853838
+P-value: 0.03716586403679808
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -1.1785040300958063
+is_cointegrated: True
+Spread Statistics:
+Standard Deviation: 1.5466
+Current Spread: 51.8846
+Current Z-Score: -0.5541
+Beta: -1.1785
+
+Analyzing PETR4.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.729248450122382
+P-value: 0.06911231339314375
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.869651245737034
+P-value: 0.14452580116092983
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 3.7002827379051495
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 5.0767
+Current Spread: -81.1648
+Current Z-Score: -0.2454
+Beta: 3.7003
+
+Analyzing PETR4.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -3.975974244382652
+P-value: 0.0015416762335903607
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -4.380386601141755
+P-value: 0.0019125330010668336
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -2.754595135053955
+is_cointegrated: True
+Spread Statistics:
+Standard Deviation: 3.1796
+Current Spread: 132.8752
+Current Z-Score: -0.8237
+Beta: -2.7546
+
+Analyzing ITUB4.SA vs BBAS3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.388178386010714
+P-value: 0.5879302440775068
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.0274849300421915
+P-value: 0.5142645546972271
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.5736107455353786
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.8825
+Current Spread: 9.1562
+Current Z-Score: 1.8721
+Beta: 0.5736
+
+Analyzing ITUB4.SA vs B3SA3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.093638396447707
+P-value: 0.24708031671522618
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.3591264368584928
+P-value: 0.34444968241930296
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.3659558110421
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.5524
+Current Spread: -1.0609
+Current Z-Score: -0.1644
+Beta: 0.3660
+
+Analyzing ITUB4.SA vs LREN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.4239805409282136
+P-value: 0.5707270934905666
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.822735236335758
+P-value: 0.6186144543917619
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.8764437693669032
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.1799
+Current Spread: -17.3020
+Current Z-Score: -2.5893
+Beta: 0.8764
+
+Analyzing ITUB4.SA vs WEGE3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.55095838818835
+P-value: 0.10356258492791692
+Critical values:
+	1%: -3.4698858990744115
+	5%: -2.8789026251889647
+	10%: -2.5760266680839004
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7920343925997264
+P-value: 0.6335831772389526
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.814041935234073
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.0275
+Current Spread: 25.0774
+Current Z-Score: -0.2460
+Beta: 0.8140
+
+Analyzing ITUB4.SA vs ELET3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.6090626648148705
+P-value: 0.0911386278821748
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.6454408324851406
+P-value: 0.21981174834317369
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.1001774731492036
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.2661
+Current Spread: 1.3022
+Current Z-Score: -0.0128
+Beta: 1.1002
+
+Analyzing ITUB4.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.965622564712281
+P-value: 0.3018467684188083
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -1.9521200730240078
+P-value: 0.5533590591176725
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.16947867348684512
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.6230
+Current Spread: 5.5186
+Current Z-Score: -1.2266
+Beta: 0.1695
+
+Analyzing ITUB4.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: 0.06458335705097587
+P-value: 0.9635581746488012
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.1742258677376123
+P-value: 0.43769175175125913
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.6232747115285506
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.1665
+Current Spread: -13.3089
+Current Z-Score: -2.0856
+Beta: 0.6233
+
+Analyzing ITUB4.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.4592165073919199
+P-value: 0.5535813222517477
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -2.1851882710210604
+P-value: 0.432014245915061
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.5142359466640483
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 7.5956
+Current Spread: 76.6130
+Current Z-Score: 1.2987
+Beta: -0.5142
+
+Analyzing ITUB4.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.9360957825828014
+P-value: 0.7758533308825459
+Critical values:
+	1%: -3.470616369591229
+	5%: -2.8792214018977655
+	10%: -2.57619681359045
+
+Cointegration Test Results:
+Cointegration t-stat: -2.2497036773205
+P-value: 0.3988999797800132
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.434655537477747
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.7802
+Current Spread: -18.7850
+Current Z-Score: -2.3370
+Beta: 1.4347
+
+Analyzing BBAS3.SA vs B3SA3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.000774430852626
+P-value: 0.28623364149786384
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7262639481172712
+P-value: 0.6647983329191672
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.467219839665952
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.5439
+Current Spread: -2.1534
+Current Z-Score: -1.5379
+Beta: 0.4672
+
+Analyzing BBAS3.SA vs LREN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.8168803906065759
+P-value: 0.8141132240181803
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -0.8146265203818592
+P-value: 0.9327543936467028
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.47736425359613893
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.7346
+Current Spread: -2.0755
+Current Z-Score: -2.1229
+Beta: 0.4774
+
+Analyzing BBAS3.SA vs WEGE3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.7970237615624094
+P-value: 0.05870016180407704
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.3039015637921523
+P-value: 0.8285552416530158
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.3360058008120535
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.2133
+Current Spread: 42.2057
+Current Z-Score: -0.3275
+Beta: 0.3360
+
+Analyzing BBAS3.SA vs ELET3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.139093537415646
+P-value: 0.22908810151917708
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.6087344491363198
+P-value: 0.7171891985675516
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.161356008428822
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.5928
+Current Spread: 4.7827
+Current Z-Score: -1.1418
+Beta: 1.1614
+
+Analyzing BBAS3.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.256430790757655
+P-value: 0.18640498553360885
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.4405614679597494
+P-value: 0.7832721446734152
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.03646231299801492
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.6785
+Current Spread: 12.0440
+Current Z-Score: -0.9625
+Beta: -0.0365
+
+Analyzing BBAS3.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: 0.7024649434828395
+P-value: 0.9898869335968782
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -1.30828922357961
+P-value: 0.8272203783300831
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.06554714967425182
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.3858
+Current Spread: 5.1371
+Current Z-Score: -1.8736
+Beta: 0.0655
+
+Analyzing BBAS3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.3248306216819161
+P-value: 0.6177371107806142
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -1.3714569945289685
+P-value: 0.8071294217413737
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.5987240705876739
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 7.6022
+Current Spread: 43.2395
+Current Z-Score: 1.1373
+Beta: 0.5987
+
+Analyzing BBAS3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.6464302721411279
+P-value: 0.8601418606998061
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.3866184000847144
+P-value: 0.8020632663157043
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.11784895389763796
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 5.3062
+Current Spread: 31.1474
+Current Z-Score: -1.9929
+Beta: -0.1178
+
+Analyzing B3SA3.SA vs LREN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.227615124757159
+P-value: 0.6616050237270128
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.4337527242361467
+P-value: 0.7857097864541154
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.7840793557324035
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.7262
+Current Spread: 2.7006
+Current Z-Score: -1.6372
+Beta: 0.7841
+
+Analyzing B3SA3.SA vs WEGE3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.859517143268201
+P-value: 0.05026219581304697
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7288685705224718
+P-value: 0.6635860552667491
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.009423843584663336
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.2351
+Current Spread: 51.4478
+Current Z-Score: -0.1825
+Beta: 0.0094
+
+Analyzing B3SA3.SA vs ELET3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -3.096497082629848
+P-value: 0.026813508460204725
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.9374392738357917
+P-value: 0.12583509078467964
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 2.381611619677466
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.0194
+Current Spread: 11.2633
+Current Z-Score: 0.2563
+Beta: 2.3816
+
+Analyzing B3SA3.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.162517085875937
+P-value: 0.220129654275253
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.6466081366544978
+P-value: 0.7008224217634961
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.08331501017715136
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.6768
+Current Spread: 10.1269
+Current Z-Score: -1.0631
+Beta: 0.0833
+
+Analyzing B3SA3.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: 0.4897544238250739
+P-value: 0.9845583409253708
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7179999257853509
+P-value: 0.6686309137308812
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.1810404015316254
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.1886
+Current Spread: -5.8425
+Current Z-Score: -1.9921
+Beta: 1.1810
+
+Analyzing B3SA3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.8158557800554487
+P-value: 0.3726186362348216
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.9720118455858178
+P-value: 0.5430924790137492
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -2.4208232443136573
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 7.3863
+Current Spread: 86.1317
+Current Z-Score: 1.3192
+Beta: -2.4208
+
+Analyzing B3SA3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.48411714501582975
+P-value: 0.8950788398610641
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7596048782059155
+P-value: 0.6491277991990683
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.9110570894470897
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 5.0792
+Current Spread: 7.1541
+Current Z-Score: -2.1265
+Beta: 1.9111
+
+Analyzing LREN3.SA vs WEGE3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.4511950539997995
+P-value: 0.12780499534288975
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.8210836464052638
+P-value: 0.6194256031546456
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.4703645027381975
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 3.2600
+Current Spread: 35.0819
+Current Z-Score: 1.0350
+Beta: 1.4704
+
+Analyzing LREN3.SA vs ELET3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.527671595960106
+P-value: 0.5197809040293112
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -1.0270542551028823
+P-value: 0.8975948219099958
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.5955452364741324
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.8807
+Current Spread: 30.4099
+Current Z-Score: 1.0411
+Beta: 0.5955
+
+Analyzing LREN3.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.8714267952729573
+P-value: 0.04877299388874726
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -2.0473903418046167
+P-value: 0.5038727184451643
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.25472135066000395
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.4931
+Current Spread: 8.1771
+Current Z-Score: -0.0009
+Beta: 0.2547
+
+Analyzing LREN3.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: 0.10871190168419467
+P-value: 0.9666508871127658
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7825907308218911
+P-value: 0.6381392295233141
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.27240886856707935
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.3342
+Current Spread: 3.9090
+Current Z-Score: -1.5352
+Beta: 0.2724
+
+Analyzing LREN3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.046877557950584
+P-value: 0.7357853484840521
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -1.405048186059277
+P-value: 0.7957776280677147
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.4303361373029448
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 7.5994
+Current Spread: 55.0702
+Current Z-Score: 1.4396
+Beta: 0.4303
+
+Analyzing LREN3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.8910885421555833
+P-value: 0.7908929209341911
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.8120572559640362
+P-value: 0.623847172071006
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.906822541914868
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 5.0397
+Current Spread: 17.7136
+Current Z-Score: -1.6330
+Beta: 0.9068
+
+Analyzing WEGE3.SA vs ELET3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.9687429275518604
+P-value: 0.3004441126912819
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.8362081563149677
+P-value: 0.15443556321933077
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.008906558395404043
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.1759
+Current Spread: 36.6209
+Current Z-Score: 0.1310
+Beta: 0.0089
+
+Analyzing WEGE3.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.405304396307864
+P-value: 0.5797304988601535
+Critical values:
+	1%: -3.47086589632514
+	5%: -2.879330279087651
+	10%: -2.57625492712671
+
+Cointegration Test Results:
+Cointegration t-stat: -2.7503722082255653
+P-value: 0.18198665560643645
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.09533996014293439
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.5473
+Current Spread: 6.1152
+Current Z-Score: -1.1789
+Beta: 0.0953
+
+Analyzing WEGE3.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: 0.29987276551713893
+P-value: 0.9773386482011416
+Critical values:
+	1%: -3.4698858990744115
+	5%: -2.8789026251889647
+	10%: -2.5760266680839004
+
+Cointegration Test Results:
+Cointegration t-stat: -2.8153392561131136
+P-value: 0.16085284491660123
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.2703452883930939
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.0948
+Current Spread: 20.8963
+Current Z-Score: -2.1771
+Beta: -0.2703
+
+Analyzing WEGE3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.0661774934321502
+P-value: 0.7283698022565585
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -2.46277495130527
+P-value: 0.2957284432474552
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.2677751314802546
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 5.4360
+Current Spread: -5.4638
+Current Z-Score: 1.9696
+Beta: 1.2678
+
+Analyzing WEGE3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.4589133125077932
+P-value: 0.8997879993262574
+Critical values:
+	1%: -3.4698858990744115
+	5%: -2.8789026251889647
+	10%: -2.5760266680839004
+
+Cointegration Test Results:
+Cointegration t-stat: -2.8241564458328696
+P-value: 0.1581195572351365
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.4457258484393627
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.9613
+Current Spread: 50.8472
+Current Z-Score: -2.2437
+Beta: -0.4457
+
+Analyzing ELET3.SA vs ABEV3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.0972929072396838
+P-value: 0.2456045295237772
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -1.7832257735095691
+P-value: 0.6378335970488309
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.08233324539274273
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 0.6561
+Current Spread: 7.9771
+Current Z-Score: -1.1306
+Beta: 0.0823
+
+Analyzing ELET3.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.343689133282275
+P-value: 0.9190846753155889
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.2107686134984728
+P-value: 0.4188175024745134
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.62733155105728
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 1.9584
+Current Spread: -16.3015
+Current Z-Score: -2.3112
+Beta: 0.6273
+
+Analyzing ELET3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -2.0174876254518668
+P-value: 0.2789584129669007
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -2.6002242949607925
+P-value: 0.23673964126130143
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -1.329497694930786
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 7.0715
+Current Spread: 109.1878
+Current Z-Score: 1.4278
+Beta: -1.3295
+
+Analyzing ELET3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.8666486028189437
+P-value: 0.7987570579892199
+Critical values:
+	1%: -3.470616369591229
+	5%: -2.8792214018977655
+	10%: -2.57619681359045
+
+Cointegration Test Results:
+Cointegration t-stat: -2.21941647039681
+P-value: 0.414374593232091
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.1529722755072334
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 4.6778
+Current Spread: -14.8822
+Current Z-Score: -2.3746
+Beta: 1.1530
+
+Analyzing ABEV3.SA vs CSAN3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: 0.16653433361580364
+P-value: 0.9703208939588921
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.347998353751617
+P-value: 0.3498623586989028
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.5643903460006214
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.3562
+Current Spread: 0.7348
+Current Z-Score: -1.6747
+Beta: 0.5644
+
+Analyzing ABEV3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -1.1296053713955994
+P-value: 0.7031224138753892
+Critical values:
+	1%: -3.469413468959902
+	5%: -2.8786964197028295
+	10%: -2.5759166089965397
+
+Cointegration Test Results:
+Cointegration t-stat: -2.1343281163269543
+P-value: 0.45844148780114147
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 0.9725219541276642
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 7.6118
+Current Spread: 49.1631
+Current Z-Score: 1.3697
+Beta: 0.9725
+
+Analyzing ABEV3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -0.8881456003042294
+P-value: 0.7918511706232636
+Critical values:
+	1%: -3.469648263987657
+	5%: -2.878798906308495
+	10%: -2.5759713094779593
+
+Cointegration Test Results:
+Cointegration t-stat: -2.4434641754857065
+P-value: 0.3045552702134073
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 1.532149386843819
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 5.2050
+Current Spread: 10.9704
+Current Z-Score: -1.8609
+Beta: 1.5321
+
+Analyzing CSAN3.SA vs EMBR3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -3.9098282312134387
+P-value: 0.0019636956077532966
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -2.7891347944284193
+P-value: 0.16916624931249818
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -2.876859807211013
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 3.3481
+Current Spread: 79.9129
+Current Z-Score: -0.8340
+Beta: -2.8769
+
+Analyzing CSAN3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -3.3146261308016016
+P-value: 0.014237211400212306
+Critical values:
+	1%: -3.4698858990744115
+	5%: -2.8789026251889647
+	10%: -2.5760266680839004
+
+Cointegration Test Results:
+Cointegration t-stat: -3.1508775500431176
+P-value: 0.07853402479106378
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: 2.0284335157736377
+is_cointegrated: False
+Spread Statistics:
+Standard Deviation: 2.1746
+Current Spread: 13.7521
+Current Z-Score: -0.9015
+Beta: 2.0284
+
+Analyzing EMBR3.SA vs RENT3.SA
+------------------------------
+
+Augmented Dickey-Fuller Test Results:
+ADF Statistic: -3.008498770618601
+P-value: 0.03410830857461973
+Critical values:
+	1%: -3.4691814633722453
+	5%: -2.878595143532943
+	10%: -2.5758625549741803
+
+Cointegration Test Results:
+Cointegration t-stat: -3.4556570366758734
+P-value: 0.03653399315191809
+Critical values: [-3.96163277 -3.37209492 -3.06934536]
+Beta: -0.5296759137813336
+is_cointegrated: True
+Spread Statistics:
+Standard Deviation: 3.4351
+Current Spread: 59.5923
+Current Z-Score: -1.6405
+Beta: -0.5297

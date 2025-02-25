@@ -1,4 +1,7 @@
-Entender pq o teste esta dando sempre nao cointegrado.
+#Entender pq o teste esta dando sempre nao cointegrado.
+Resolver o problema no test_cointegration:
+    analyze_all_pairs e analyze_pair_periods dao resultados diferentes para o mesmo par.
+
 Fazer a analise de cointegração com diferentes intervalos de tempo.
 Adicionar a visualização do dickey fuller (teste de raiz unitária, quanto menor melhor)
 Adicionar o grafico do historico do beta para visualizar a volatilidade relativa entre os ativos e a volatilidade do proprio beta.

@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -32,6 +32,11 @@ class CointegrationAnalyzer:
         Returns:
             Dictionary containing analysis results
         """
+
+        # print(f"series1: {self.series1}")   
+        # print(f"series2: {self.series2}")
+        # self.series1.iloc[::-1].to_csv('series1.csv')
+        # self.series2.iloc[::-1].to_csv('series2.csv')
         # Run cointegration test
         self.is_cointegrated, self.p_value = self.test_cointegration()
         
@@ -50,7 +55,25 @@ class CointegrationAnalyzer:
             - Boolean indicating if series are cointegrated
             - P-value of the cointegration test
         """
-        _, p_value, _ = coint(self.series1, self.series2)
+        # Run Dickey-Fuller test on spread
+        spread = self.calculate_spread()
+        adf_result = adfuller(spread)
+        print("\nAugmented Dickey-Fuller Test Results:")
+        print(f"ADF Statistic: {adf_result[0]}")
+        print(f"P-value: {adf_result[1]}")
+        print("Critical values:")
+        for key, value in adf_result[4].items():
+            print(f"\t{key}: {value}")
+        
+        # Run cointegration test
+        coint_t, p_value, crit_value = coint(self.series1, self.series2)
+        print(f"\nCointegration Test Results:")
+        print(f"Cointegration t-stat: {coint_t}")
+        print(f"P-value: {p_value}")
+        print(f"Critical values: {crit_value}")
+        print(f"Beta: {self.beta}")
+        print(f"is_cointegrated: {p_value < 0.05}")
+        
         return p_value < 0.05, p_value
         
     def calculate_spread(self) -> pd.Series:
@@ -196,4 +219,100 @@ class CointegrationAnalyzer:
         plt.title(f"Residuals Analysis: {self.names[0]} vs {self.names[1]}")
         plt.legend()
         plt.grid(True, alpha=0.3)
+        plt.show()
+
+    def print_spread_stats(self) -> None:
+        """
+        Print relevant statistics about the spread.
+        """
+        if self.spread is None:
+            self.spread = self.calculate_spread()
+            
+        print(f"Spread Statistics:")
+        print(f"Standard Deviation: {self.spread.std():.4f}")
+        print(f"Current Spread: {self.spread.iloc[-1]:.4f}")
+        print(f"Current Z-Score: {self.zscore.iloc[-1]:.4f}")
+        print(f"Beta: {self.beta:.4f}")
+
+    def analyze_periods(self, end_date: pd.Timestamp, periods: List[int], lookback_days: int = None) -> List[dict]:
+        """
+        Analyze cointegration for multiple window sizes.
+        
+        Args:
+            end_date: The end date for analysis
+            periods: List of window sizes in days for rolling analysis
+            lookback_days: How many days to look back from end_date. If None, uses max(periods)
+            
+        Returns:
+            List of dictionaries containing analysis results for each period
+        """
+        results = []
+        lookback = lookback_days if lookback_days is not None else max(periods)
+        
+        start_date = end_date - pd.Timedelta(days=lookback)
+        
+        # Get data for the entire period
+        mask = (self.series1.index <= end_date) & (self.series1.index >= start_date)
+        full_series1 = self.series1[mask]
+        full_series2 = self.series2[mask]
+        
+        for window in periods:
+            # Get the last 'window' days of data
+            period_series1 = full_series1.iloc[-window:]
+            period_series2 = full_series2.iloc[-window:]
+            
+            # Create temporary analyzer for this window
+            period_analyzer = CointegrationAnalyzer(period_series1, period_series2, self.names)
+            result = period_analyzer.analyze()
+            
+            # Print statistics for this window
+            print(f"\nWindow Size: {window} days")
+            period_analyzer.print_spread_stats()
+            
+            # Store results
+            results.append({
+                'period': window,
+                'analyzer': period_analyzer,
+                'results': result
+            })
+            
+        return results
+
+    def plot_residuals_multi_period(self, end_date: pd.Timestamp, periods: List[int], lookback_days: int = None) -> None:
+        """
+        Plot residuals for multiple window sizes in the same window.
+        
+        Args:
+            end_date: The end date for analysis
+            periods: List of window sizes in days for rolling analysis
+            lookback_days: How many days to look back from end_date. If None, uses max(periods)
+        """
+        results = self.analyze_periods(end_date, periods, lookback_days)
+        
+        # Create figure with subplots
+        fig, axes = plt.subplots(len(periods), 1, figsize=(12, 4*len(periods)))
+        
+        for idx, result in enumerate(results):
+            window = result['period']
+            analyzer = result['analyzer']
+            ax = axes[idx] if len(periods) > 1 else axes
+            
+            # Plot residuals
+            ax.plot(analyzer.spread, color='black', label='Residuals')
+            
+            # Plot mean line
+            mean = analyzer.spread.mean()
+            ax.axhline(y=mean, color='red', linestyle='--', label='Mean')
+            
+            # Plot ±2σ bands
+            std = analyzer.spread.std()
+            ax.axhline(y=mean + 2*std, color='blue', linestyle='--', label='±2σ Bands')
+            ax.axhline(y=mean - 2*std, color='blue', linestyle='--')
+            
+            ax.set_title(f"{window} Days Window")
+            ax.legend()
+            ax.grid(True, alpha=0.3)
+        
+        plt.suptitle(f"Residuals Analysis: {self.names[0]} vs {self.names[1]}")
+        plt.tight_layout()
         plt.show() 
