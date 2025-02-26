@@ -44,6 +44,9 @@ class CointegrationAnalyzer:
         self.spread = self.calculate_spread()
         self.zscore = self.calculate_zscore()
         
+        # Print spread statistics
+        self.print_spread_stats()
+        
         return self.get_summary_stats()
         
     def test_cointegration(self) -> Tuple[bool, float]:
@@ -193,6 +196,19 @@ class CointegrationAnalyzer:
         plt.tight_layout()
         plt.show()
 
+    def print_spread_stats(self) -> None:
+        """
+        Print relevant statistics about the spread.
+        """
+        if self.spread is None:
+            self.spread = self.calculate_spread()
+            
+        print(f"\nSpread Statistics:")
+        print(f"Standard Deviation: {self.spread.std():.4f}")
+        print(f"Current Spread: {self.spread.iloc[-1]:.4f}")
+        print(f"Current Z-Score: {self.zscore.iloc[-1]:.4f}")
+        print(f"Beta: {self.beta:.4f}")
+
     def plot_residuals(self) -> None:
         """
         Plot the residuals (spread) with mean and ±2σ bands.
@@ -219,100 +235,4 @@ class CointegrationAnalyzer:
         plt.title(f"Residuals Analysis: {self.names[0]} vs {self.names[1]}")
         plt.legend()
         plt.grid(True, alpha=0.3)
-        plt.show()
-
-    def print_spread_stats(self) -> None:
-        """
-        Print relevant statistics about the spread.
-        """
-        if self.spread is None:
-            self.spread = self.calculate_spread()
-            
-        print(f"Spread Statistics:")
-        print(f"Standard Deviation: {self.spread.std():.4f}")
-        print(f"Current Spread: {self.spread.iloc[-1]:.4f}")
-        print(f"Current Z-Score: {self.zscore.iloc[-1]:.4f}")
-        print(f"Beta: {self.beta:.4f}")
-
-    def analyze_periods(self, end_date: pd.Timestamp, periods: List[int], lookback_days: int = None) -> List[dict]:
-        """
-        Analyze cointegration for multiple window sizes.
-        
-        Args:
-            end_date: The end date for analysis
-            periods: List of window sizes in days for rolling analysis
-            lookback_days: How many days to look back from end_date. If None, uses max(periods)
-            
-        Returns:
-            List of dictionaries containing analysis results for each period
-        """
-        results = []
-        lookback = lookback_days if lookback_days is not None else max(periods)
-        
-        start_date = end_date - pd.Timedelta(days=lookback)
-        
-        # Get data for the entire period
-        mask = (self.series1.index <= end_date) & (self.series1.index >= start_date)
-        full_series1 = self.series1[mask]
-        full_series2 = self.series2[mask]
-        
-        for window in periods:
-            # Get the last 'window' days of data
-            period_series1 = full_series1.iloc[-window:]
-            period_series2 = full_series2.iloc[-window:]
-            
-            # Create temporary analyzer for this window
-            period_analyzer = CointegrationAnalyzer(period_series1, period_series2, self.names)
-            result = period_analyzer.analyze()
-            
-            # Print statistics for this window
-            print(f"\nWindow Size: {window} days")
-            period_analyzer.print_spread_stats()
-            
-            # Store results
-            results.append({
-                'period': window,
-                'analyzer': period_analyzer,
-                'results': result
-            })
-            
-        return results
-
-    def plot_residuals_multi_period(self, end_date: pd.Timestamp, periods: List[int], lookback_days: int = None) -> None:
-        """
-        Plot residuals for multiple window sizes in the same window.
-        
-        Args:
-            end_date: The end date for analysis
-            periods: List of window sizes in days for rolling analysis
-            lookback_days: How many days to look back from end_date. If None, uses max(periods)
-        """
-        results = self.analyze_periods(end_date, periods, lookback_days)
-        
-        # Create figure with subplots
-        fig, axes = plt.subplots(len(periods), 1, figsize=(12, 4*len(periods)))
-        
-        for idx, result in enumerate(results):
-            window = result['period']
-            analyzer = result['analyzer']
-            ax = axes[idx] if len(periods) > 1 else axes
-            
-            # Plot residuals
-            ax.plot(analyzer.spread, color='black', label='Residuals')
-            
-            # Plot mean line
-            mean = analyzer.spread.mean()
-            ax.axhline(y=mean, color='red', linestyle='--', label='Mean')
-            
-            # Plot ±2σ bands
-            std = analyzer.spread.std()
-            ax.axhline(y=mean + 2*std, color='blue', linestyle='--', label='±2σ Bands')
-            ax.axhline(y=mean - 2*std, color='blue', linestyle='--')
-            
-            ax.set_title(f"{window} Days Window")
-            ax.legend()
-            ax.grid(True, alpha=0.3)
-        
-        plt.suptitle(f"Residuals Analysis: {self.names[0]} vs {self.names[1]}")
-        plt.tight_layout()
         plt.show() 
