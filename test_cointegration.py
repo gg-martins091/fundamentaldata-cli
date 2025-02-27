@@ -61,7 +61,7 @@ def get_stock_data(ticker: str, start: str, end: str, debug: bool = False) -> pd
     return data
 
 
-def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False) -> dict:
+def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False, olp: bool = False) -> dict:
     """
     Analyze a pair of stocks for cointegration.
     
@@ -77,8 +77,9 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
     Returns:
         Dictionary with cointegration analysis results
     """
-    print(f"\nAnalyzing {stock1} vs {stock2}")
-    print("-" * 50)
+    if not olp:
+        print(f"\nAnalyzing {stock1} vs {stock2}")
+        print("-" * 50)
     
     try:
         # Calculate the period needed
@@ -118,11 +119,12 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         results = analyzer.analyze()
         
         # Print key results
-        print(f"\nCointegration Key Results:")
-        print(f"Suggested Position: {results.get('suggested_position', 'N/A')}")
-        print(f"Current Z-Score: {results.get('current_zscore', 'N/A')}")
-        print(f"P-value: {results.get('p_value', 'N/A')}")
-        print(f"Confidence Level: {results.get('confidence_level', 'N/A')}")
+        if not olp or results.get('has_position', False):
+            print(f"\nCointegration Key Results:")
+            print(f"Suggested Position: {results.get('suggested_position', 'N/A')}")
+            print(f"Current Z-Score: {results.get('current_zscore', 'N/A')}")
+            print(f"P-value: {results.get('p_value', 'N/A')}")
+            print(f"Confidence Level: {results.get('confidence_level', 'N/A')}")
 
         # Plot analysis if requested
         if plot_charts and results.get('has_position', False):
@@ -138,7 +140,7 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         print(f"Error analyzing pair: {e}")
         return None
 
-def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False) -> List[dict]:
+def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False, olp: bool = False) -> List[dict]:
     """
     Analyze all possible pairs from a list of stocks.
     
@@ -170,7 +172,7 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                 lookback_days=lookback_days,
                 plot_charts=plot_charts,
                 debug=debug,
-                plot_spread=plot_spread
+                olp=olp
             )
             
             if pair_result:
@@ -187,7 +189,7 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                 lookback_days=lookback_days,
                 plot_charts=plot_charts,
                 debug=debug,
-                plot_spread=plot_spread
+                olp=olp
             )
             
             if pair_result:
@@ -206,6 +208,8 @@ if __name__ == "__main__":
     parser.add_argument('--debug', action='store_true', help='Print detailed statistics')
     parser.add_argument('--plot-spread', action='store_true', help='Plot the spread chart')
     parser.add_argument('--plot', action='store_true', help='Plot z-score chart for analyzed pairs')
+    parser.add_argument('-olp', action='store_true', help='Only logs pairs with position')
+    parser.add_argument('--only-log-positions', action='store_true', help='Only logs pairs with position')
     args = parser.parse_args()
     
     # Create data directory if it doesn't exist
@@ -214,8 +218,70 @@ if __name__ == "__main__":
     
     # List of stocks to analyze
     brazilian_stocks = [
-        'CPFE3.SA',
-        'BBAS3.SA',
+        'VALE3.SA',
+'WEGE3.SA',
+'PETR4.SA',
+'ABEV3.SA',
+'ITUB4.SA',
+'BBAS3.SA',
+'BBDC4.SA',
+'RADL3.SA',
+'B3SA3.SA',
+'LREN3.SA',
+'BPAC11.SA',
+'VIVT3.SA',
+'EMBR3.SA',
+'IRBR3.SA',
+'VBBR3.SA',
+'HAPV3.SA',
+'CSAN3.SA',
+'SUZB3.SA',
+'PETR3.SA',
+'ELET3.SA',
+'PRIO3.SA',
+'GGBR4.SA',
+'SBSP3.SA',
+'RENT3.SA',
+'RAIL3.SA',
+'NTCO3.SA',
+'TIMS3.SA',
+'EQTL3.SA',
+'BRFS3.SA',
+'ITSA4.SA',
+'MGLU3.SA',
+'CCRO3.SA',
+'CSNA3.SA',
+'KLBN11.SA',
+'JBSS3.SA',
+'BBSE3.SA',
+'AZUL4.SA',
+'TOTS3.SA',
+'MULT3.SA',
+'MRVE3.SA',
+'ASAI3.SA',
+'MRFG3.SA',
+'CPLE6.SA',
+'RDOR3.SA',
+'UGPA3.SA',
+'ONCO3.SA',
+'CMIG4.SA',
+'BBDC3.SA',
+'ENEV3.SA',
+'IGTI11.SA',
+'CRFB3.SA',
+'VIVA3.SA',
+'STBP3.SA',
+'BRAV3.SA',
+'HYPE3.SA',
+'AZZA3.SA',
+'PSSA3.SA',
+'SLCE3.SA',
+'ENGI11.SA',
+'AURE3.SA',
+'CPFE3.SA',
+'GOAU4.SA',
+'POMO4.SA',
+'CYRE3.SA',
     ]
     
     # EXAMPLE 1: Analyze a single pair using lookback period
@@ -237,6 +303,7 @@ if __name__ == "__main__":
     #     plot_charts=args.plot,
     #     debug=args.debug,
     #     plot_spread=args.plot_spread
+    #     olp=args.olp or args.only_log_positions
     # )
     # analyze_pair_periods(
     #     stock1='CPFE3.SA',
@@ -246,6 +313,7 @@ if __name__ == "__main__":
     #     plot_charts=args.plot,
     #     debug=args.debug,
     #     plot_spread=args.plot_spread
+    #     olp=args.olp or args.only_log_positions
     # )
   
     # EXAMPLE 3: Analyze all possible pairs from a list of stocks
@@ -255,6 +323,8 @@ if __name__ == "__main__":
         lookback_days=200,
         plot_charts=args.plot,
         debug=args.debug,
-        plot_spread=args.plot_spread
+        plot_spread=args.plot_spread,
+        olp=args.olp or args.only_log_positions
     )
+    
     
