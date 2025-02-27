@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import os
+import argparse
 from modules.cointegration import CointegrationAnalyzer
 import matplotlib.pyplot as plt
 from typing import List, Tuple
@@ -56,59 +57,7 @@ def get_stock_data(ticker: str, start: str, end: str) -> pd.Series:
     return data
 
 
-    """
-    Analyze a specific historical time range for a pair of stocks.
-    
-    Args:
-        stock1: First stock ticker (with .SA suffix)
-        stock2: Second stock ticker (with .SA suffix)
-        start: Start date in YYYY-MM-DD format
-        end: End date in YYYY-MM-DD format
-        plot_charts: Whether to plot charts
-        
-    Returns:
-        Dictionary with cointegration analysis results
-    """
-    print(f"\nAnalyzing {stock1} vs {stock2} from {start} to {end}")
-    print("-" * 50)
-    
-    try:
-        # Get specific date range data
-        s1 = get_stock_data(stock1, start, end)
-        s2 = get_stock_data(stock2, start, end)
-        
-        # Align dates
-        common_dates = s1.index.intersection(s2.index)
-        s1 = s1[common_dates]
-        s2 = s2[common_dates]
-        
-        # Create analyzer instance
-        analyzer = CointegrationAnalyzer(
-            series1=s1,
-            series2=s2,
-            names=(stock1.replace('.SA', ''), stock2.replace('.SA', ''))
-        )
-        
-        # Run analysis
-        results = analyzer.analyze()
-        
-        # Print results
-        print(f"\nCointegration Results:")
-        for key, value in results.items():
-            print(f"{key}: {value}")
-        
-        # Plot analysis if requested
-        if plot_charts:
-            analyzer.plot()
-            analyzer.plot_residuals()
-            
-        return results
-            
-    except Exception as e:
-        print(f"Error analyzing pair: {e}")
-        return None
-
-def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = True) -> dict:
+def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = True, debug: bool = False) -> dict:
     """
     Analyze a pair of stocks for cointegration.
     
@@ -116,8 +65,9 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         stock1: First stock ticker (with .SA suffix)
         stock2: Second stock ticker (with .SA suffix)
         end: End date in YYYY-MM-DD format
-        lookback_days: How many days to look back from end_date
+        lookback_days: How many trading days to look back from end_date
         plot_charts: Whether to plot charts
+        debug: Whether to print detailed statistics
         
     Returns:
         Dictionary with cointegration analysis results
@@ -128,8 +78,14 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
     try:
         # Calculate the period needed
         max_period = lookback_days if lookback_days is not None else 250
+        print(f"Requested trading days: {max_period}")
+        
+        # Fetch data with an extended period (approximately 1.4x to account for weekends and holidays)
+        # We'll trim it down to the exact number later
+        calendar_days = int(max_period * 1.5)
         end_dt = pd.Timestamp(end).tz_localize('America/Sao_Paulo')
-        start_dt = end_dt - pd.Timedelta(days=max_period)
+        start_dt = end_dt - pd.Timedelta(days=calendar_days)
+        print(f"Fetching from {start_dt.strftime('%Y-%m-%d')} to {end_dt.strftime('%Y-%m-%d')} (approx. {calendar_days} calendar days)")
         
         # Fetch data (will be cached internally)
         s1 = get_stock_data(stock1, start_dt.strftime('%Y-%m-%d'), end_dt.strftime('%Y-%m-%d'))
@@ -140,20 +96,37 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         s1 = s1[common_dates]
         s2 = s2[common_dates]
         
+        # Trim to the exact number of trading days requested
+        if lookback_days is not None and len(s1) > lookback_days:
+            s1 = s1[-lookback_days:]
+            s2 = s2[-lookback_days:]
+        
+        actual_days = len(s1)
+        print(f"Using {actual_days} trading days of data")
+        
         # Create analyzer instance
         analyzer = CointegrationAnalyzer(
             series1=s1,
             series2=s2,
-            names=(stock1.replace('.SA', ''), stock2.replace('.SA', ''))
+            names=(stock1.replace('.SA', ''), stock2.replace('.SA', '')),
+            debug=debug
         )
         
         # Run analysis
         results = analyzer.analyze()
         
-        # Print results
-        print(f"\nCointegration Results:")
-        for key, value in results.items():
-            print(f"{key}: {value}")
+        # Print key results
+        print(f"\nCointegration Key Results:")
+        print(f"Suggested Position: {results.get('suggested_position', 'N/A')}")
+        print(f"Current Z-Score: {results.get('current_zscore', 'N/A')}")
+        print(f"P-value: {results.get('p_value', 'N/A')}")
+        
+        # Print detailed results if debugging
+        if debug:
+            print(f"\nDetailed Results:")
+            for key, value in results.items():
+                if key not in ['suggested_position', 'current_zscore', 'p_value']:
+                    print(f"{key}: {value}")
         
         # Plot analysis if requested
         if plot_charts:
@@ -165,7 +138,7 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         print(f"Error analyzing pair: {e}")
         return None
 
-def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False) -> List[dict]:
+def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False) -> List[dict]:
     """
     Analyze all possible pairs from a list of stocks.
     
@@ -174,6 +147,7 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
         end: End date in YYYY-MM-DD format
         lookback_days: How many days to look back from end_date
         plot_charts: Whether to plot charts for each pair
+        debug: Whether to print detailed statistics
         
     Returns:
         List of dictionaries with analysis results for each pair
@@ -193,7 +167,8 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                 stock2=stock2, 
                 end=end, 
                 lookback_days=lookback_days,
-                plot_charts=plot_charts
+                plot_charts=plot_charts,
+                debug=debug
             )
             
             if pair_result:
@@ -202,41 +177,75 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                     'stock2': stock2,
                     'results': pair_result
                 })
+
+            pair_result = analyze_pair_periods(
+                stock1=stock2, 
+                stock2=stock1, 
+                end=end, 
+                lookback_days=lookback_days,
+                plot_charts=plot_charts,
+                debug=debug
+            )
+            
+            if pair_result:
+                results.append({
+                    'stock1': stock2,
+                    'stock2': stock1,
+                    'results': pair_result
+                })
     
     return results
 
 
 if __name__ == "__main__":
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description='Analyze stock pairs for cointegration')
+    parser.add_argument('--debug', action='store_true', help='Print detailed statistics')
+    args = parser.parse_args()
+    
     # Create data directory if it doesn't exist
     if not os.path.exists('data'):
         os.makedirs('data')
     
     # List of stocks to analyze
     brazilian_stocks = [
-        # 'VALE3.SA',   # Vale
-        # 'PETR4.SA',   # Petrobras
-        # 'ITUB4.SA',   # Itau Unibanco
-        # 'BBAS3.SA',   # Banco do Brasil
-        'EMBR3.SA',   # Embraer
-        'RENT3.SA'    # Localiza
+        'CPFE3.SA',
+        'BBAS3.SA',
     ]
     
     # EXAMPLE 1: Analyze a single pair using lookback period
     # analyze_pair_periods(
-    #     stock1='EMBR3.SA',
-    #     stock2='RENT3.SA',
-    #     end='2025-02-25',
-    #     lookback_days=250,
-    #     plot_charts=True
+    #     stock1='CPFE3.SA',
+    #     stock2='BBAS3.SA',
+    #     end='2025-02-27',
+    #     lookback_days=200,
+    #     plot_charts=True,
+    #     debug=args.debug
     # )
-    
+
+    # analyze_pair_periods(
+    #     stock1='BBAS3.SA',
+    #     stock2='CPFE3.SA',
+    #     end='2025-02-27',
+    #     lookback_days=200,
+    #     plot_charts=True,
+    #     debug=args.debug
+    # )
+    # analyze_pair_periods(
+    #     stock1='CPFE3.SA',
+    #     stock2='BBAS3.SA',
+    #     end='2025-02-27',
+    #     lookback_days=200,
+    #     plot_charts=True,
+    #     debug=args.debug
+    # )
   
-    
     # EXAMPLE 3: Analyze all possible pairs from a list of stocks
     analyze_all_pairs(
         stocks=brazilian_stocks,  # Just use the first 2 stocks for this example
-        end='2025-02-25',
-        lookback_days=250,
-        plot_charts=True
+        end='2025-02-27',
+        lookback_days=200,
+        plot_charts=True,
+        debug=args.debug
     )
     
