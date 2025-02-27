@@ -52,6 +52,7 @@ class CointegrationAnalyzer:
         self.p_value = None
         self.zscore = None
         self.confidence_level = None
+        self.has_position = None
     def analyze(self) -> dict:
         """
         Perform complete cointegration analysis.
@@ -172,7 +173,8 @@ class CointegrationAnalyzer:
                 'message': 'Series are not cointegrated',
                 'current_zscore': self.zscore.iloc[-1] if self.zscore is not None else None,
                 'suggested_position': self._suggest_position(),
-                'confidence_level': self.confidence_level
+                'confidence_level': self.confidence_level,
+                'has_position': self.has_position
             }
 
         return {
@@ -183,7 +185,8 @@ class CointegrationAnalyzer:
             'spread_std': self.spread.std(),
             'current_zscore': self.zscore.iloc[-1],
             'suggested_position': self._suggest_position(),
-            'confidence_level': self.confidence_level
+            'confidence_level': self.confidence_level,
+            'has_position': self.has_position
         }
     
     def _suggest_position(self) -> str:
@@ -196,10 +199,13 @@ class CointegrationAnalyzer:
         current_zscore = self.zscore.iloc[-1]
         
         if current_zscore > 2:
+            self.has_position = True
             return f"Short {self.names[1]}, Long {self.beta:.2f}x {self.names[0]}"
         elif current_zscore < -2:
+            self.has_position = True
             return f"Long {self.names[1]}, Short {self.beta:.2f}x {self.names[0]}"
         else:
+            self.has_position = False
             return "No position - spread within normal range"
     
     def plot(self, show_signals: bool = True) -> None:

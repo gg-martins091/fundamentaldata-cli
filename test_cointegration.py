@@ -61,7 +61,7 @@ def get_stock_data(ticker: str, start: str, end: str, debug: bool = False) -> pd
     return data
 
 
-def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = True, debug: bool = False, plot_spread: bool = False) -> dict:
+def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False) -> dict:
     """
     Analyze a pair of stocks for cointegration.
     
@@ -125,11 +125,11 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         print(f"Confidence Level: {results.get('confidence_level', 'N/A')}")
 
         # Plot analysis if requested
-        if plot_charts:
+        if plot_charts and results.get('has_position', False):
             analyzer.plot()
         
         # Plot spread if requested
-        if plot_spread:
+        if plot_spread and results.get('has_position', False):
             analyzer.plot_spread()
             
         return results
@@ -205,6 +205,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Analyze stock pairs for cointegration')
     parser.add_argument('--debug', action='store_true', help='Print detailed statistics')
     parser.add_argument('--plot-spread', action='store_true', help='Plot the spread chart')
+    parser.add_argument('--plot', action='store_true', help='Plot z-score chart for analyzed pairs')
     args = parser.parse_args()
     
     # Create data directory if it doesn't exist
@@ -223,7 +224,7 @@ if __name__ == "__main__":
     #     stock2='BBAS3.SA',
     #     end='2025-02-27',
     #     lookback_days=200,
-    #     plot_charts=True,
+    #     plot_charts=args.plot,
     #     debug=args.debug,
     #     plot_spread=args.plot_spread
     # )
@@ -233,7 +234,7 @@ if __name__ == "__main__":
     #     stock2='CPFE3.SA',
     #     end='2025-02-27',
     #     lookback_days=200,
-    #     plot_charts=True,
+    #     plot_charts=args.plot,
     #     debug=args.debug,
     #     plot_spread=args.plot_spread
     # )
@@ -242,7 +243,7 @@ if __name__ == "__main__":
     #     stock2='BBAS3.SA',
     #     end='2025-02-27',
     #     lookback_days=200,
-    #     plot_charts=True,
+    #     plot_charts=args.plot,
     #     debug=args.debug,
     #     plot_spread=args.plot_spread
     # )
@@ -252,7 +253,7 @@ if __name__ == "__main__":
         stocks=brazilian_stocks,  # Just use the first 2 stocks for this example
         end='2025-02-27',
         lookback_days=200,
-        plot_charts=True,
+        plot_charts=args.plot,
         debug=args.debug,
         plot_spread=args.plot_spread
     )
