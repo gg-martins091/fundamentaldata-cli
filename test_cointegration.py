@@ -9,7 +9,7 @@ from typing import List, Tuple
 # Global cache for stock data
 _stock_data_cache = {}
 
-def get_stock_data(ticker: str, start: str, end: str) -> pd.Series:
+def get_stock_data(ticker: str, start: str, end: str, debug: bool = False) -> pd.Series:
     """
     Get stock data from cache, CSV file, or Yahoo Finance.
     Automatically caches results for future calls.
@@ -27,15 +27,18 @@ def get_stock_data(ticker: str, start: str, end: str) -> pd.Series:
     
     # Check if data is already in cache
     if cache_key in _stock_data_cache:
-        print(f"Using cached data for {ticker} from {start} to {end}")
+        if debug:
+            print(f"Using cached data for {ticker} from {start} to {end}")
         return _stock_data_cache[cache_key]
     
-    print(f"ticker: {ticker} start: {start} end: {end}")
+    if debug:
+        print(f"ticker: {ticker} start: {start} end: {end}")
     
     # Check if CSV exists (remove .SA suffix for filename)
     csv_filename = f"{ticker.replace('.SA', '')}.csv"
     if os.path.exists(csv_filename):
-        print(f"Loading {ticker} data from {csv_filename}")
+        if debug:
+            print(f"Loading {ticker} data from {csv_filename}")
         # Read CSV and ensure datetime index
         df = pd.read_csv(csv_filename, index_col=0, parse_dates=True)
         # Localize index to America/Sao_Paulo timezone
@@ -49,7 +52,8 @@ def get_stock_data(ticker: str, start: str, end: str) -> pd.Series:
         mask = (df.index >= start_dt) & (df.index <= end_dt)
         data = df.loc[mask]['Close']
     else:
-        print(f"Fetching {ticker} data from Yahoo Finance")
+        if debug:
+            print(f"Fetching {ticker} data from Yahoo Finance")
         data = yf.Ticker(ticker).history(start=start, end=end)['Close']
     
     # Cache the data
@@ -57,7 +61,7 @@ def get_stock_data(ticker: str, start: str, end: str) -> pd.Series:
     return data
 
 
-def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = True, debug: bool = False) -> dict:
+def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int = None, plot_charts: bool = True, debug: bool = False, plot_spread: bool = False) -> dict:
     """
     Analyze a pair of stocks for cointegration.
     
@@ -68,6 +72,7 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         lookback_days: How many trading days to look back from end_date
         plot_charts: Whether to plot charts
         debug: Whether to print detailed statistics
+        plot_spread: Whether to plot the spread chart
         
     Returns:
         Dictionary with cointegration analysis results
@@ -78,14 +83,12 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
     try:
         # Calculate the period needed
         max_period = lookback_days if lookback_days is not None else 250
-        print(f"Requested trading days: {max_period}")
         
         # Fetch data with an extended period (approximately 1.4x to account for weekends and holidays)
         # We'll trim it down to the exact number later
         calendar_days = int(max_period * 1.5)
         end_dt = pd.Timestamp(end).tz_localize('America/Sao_Paulo')
         start_dt = end_dt - pd.Timedelta(days=calendar_days)
-        print(f"Fetching from {start_dt.strftime('%Y-%m-%d')} to {end_dt.strftime('%Y-%m-%d')} (approx. {calendar_days} calendar days)")
         
         # Fetch data (will be cached internally)
         s1 = get_stock_data(stock1, start_dt.strftime('%Y-%m-%d'), end_dt.strftime('%Y-%m-%d'))
@@ -102,7 +105,6 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
             s2 = s2[-lookback_days:]
         
         actual_days = len(s1)
-        print(f"Using {actual_days} trading days of data")
         
         # Create analyzer instance
         analyzer = CointegrationAnalyzer(
@@ -131,6 +133,10 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         # Plot analysis if requested
         if plot_charts:
             analyzer.plot()
+        
+        # Plot spread if requested
+        if plot_spread:
+            analyzer.plot_spread()
             
         return results
             
@@ -138,7 +144,7 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         print(f"Error analyzing pair: {e}")
         return None
 
-def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False) -> List[dict]:
+def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False) -> List[dict]:
     """
     Analyze all possible pairs from a list of stocks.
     
@@ -148,6 +154,7 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
         lookback_days: How many days to look back from end_date
         plot_charts: Whether to plot charts for each pair
         debug: Whether to print detailed statistics
+        plot_spread: Whether to plot the spread chart
         
     Returns:
         List of dictionaries with analysis results for each pair
@@ -168,7 +175,8 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                 end=end, 
                 lookback_days=lookback_days,
                 plot_charts=plot_charts,
-                debug=debug
+                debug=debug,
+                plot_spread=plot_spread
             )
             
             if pair_result:
@@ -184,7 +192,8 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                 end=end, 
                 lookback_days=lookback_days,
                 plot_charts=plot_charts,
-                debug=debug
+                debug=debug,
+                plot_spread=plot_spread
             )
             
             if pair_result:
@@ -201,6 +210,7 @@ if __name__ == "__main__":
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description='Analyze stock pairs for cointegration')
     parser.add_argument('--debug', action='store_true', help='Print detailed statistics')
+    parser.add_argument('--plot-spread', action='store_true', help='Plot the spread chart')
     args = parser.parse_args()
     
     # Create data directory if it doesn't exist
@@ -220,7 +230,8 @@ if __name__ == "__main__":
     #     end='2025-02-27',
     #     lookback_days=200,
     #     plot_charts=True,
-    #     debug=args.debug
+    #     debug=args.debug,
+    #     plot_spread=args.plot_spread
     # )
 
     # analyze_pair_periods(
@@ -229,7 +240,8 @@ if __name__ == "__main__":
     #     end='2025-02-27',
     #     lookback_days=200,
     #     plot_charts=True,
-    #     debug=args.debug
+    #     debug=args.debug,
+    #     plot_spread=args.plot_spread
     # )
     # analyze_pair_periods(
     #     stock1='CPFE3.SA',
@@ -237,7 +249,8 @@ if __name__ == "__main__":
     #     end='2025-02-27',
     #     lookback_days=200,
     #     plot_charts=True,
-    #     debug=args.debug
+    #     debug=args.debug,
+    #     plot_spread=args.plot_spread
     # )
   
     # EXAMPLE 3: Analyze all possible pairs from a list of stocks
@@ -246,6 +259,7 @@ if __name__ == "__main__":
         end='2025-02-27',
         lookback_days=200,
         plot_charts=True,
-        debug=args.debug
+        debug=args.debug,
+        plot_spread=args.plot_spread
     )
     

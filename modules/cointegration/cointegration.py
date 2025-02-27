@@ -216,6 +216,52 @@ class CointegrationAnalyzer:
         plt.tight_layout()
         plt.show()
 
+    def plot_spread(self) -> None:
+        """
+        Plot the spread between the two series.
+        Shows the raw spread with a mean line and trend.
+        """
+        if self.spread is None:
+            self.spread = self.calculate_spread()
+            
+        plt.figure(figsize=(12, 6))
+        
+        # Plot the spread
+        plt.plot(self.spread, color='blue', label='Spread')
+        
+        # Add mean line
+        plt.axhline(y=self.spread.mean(), color='red', linestyle='--', label=f'Mean: {self.spread.mean():.4f}')
+        
+        # Add trend line using linear regression on the spread
+        x = np.arange(len(self.spread)).reshape(-1, 1)
+        y = self.spread.values
+        model = LinearRegression()
+        model.fit(x, y)
+        trend = model.predict(x)
+        plt.plot(self.spread.index, trend, color='green', linestyle='-', label='Trend')
+        
+        # Add standard deviation bands
+        std_dev = self.spread.std()
+        plt.axhline(y=self.spread.mean() + std_dev, color='gray', linestyle=':', label=f'+1σ: {self.spread.mean() + std_dev:.4f}')
+        plt.axhline(y=self.spread.mean() - std_dev, color='gray', linestyle=':', label=f'-1σ: {self.spread.mean() - std_dev:.4f}')
+        
+        # Add current spread value annotation
+        current_spread = self.spread.iloc[-1]
+        plt.scatter(self.spread.index[-1], current_spread, color='red', s=50)
+        plt.annotate(f'Current: {current_spread:.4f}', 
+                    xy=(self.spread.index[-1], current_spread),
+                    xytext=(10, 30),
+                    textcoords='offset points',
+                    arrowprops=dict(arrowstyle='->', connectionstyle='arc3,rad=.2'))
+        
+        # Add title and labels
+        plt.title(f"Spread: {self.names[0]} vs {self.names[1]} | β: {self.beta:.4f} | {self.original_series1.size} days")
+        plt.ylabel('Spread Value')
+        plt.grid(True, alpha=0.3)
+        plt.legend()
+        plt.tight_layout()
+        plt.show()
+
     def print_spread_stats(self) -> None:
         """
         Print relevant statistics about the spread.
