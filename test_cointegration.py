@@ -122,14 +122,8 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         print(f"Suggested Position: {results.get('suggested_position', 'N/A')}")
         print(f"Current Z-Score: {results.get('current_zscore', 'N/A')}")
         print(f"P-value: {results.get('p_value', 'N/A')}")
-        
-        # Print detailed results if debugging
-        if debug:
-            print(f"\nDetailed Results:")
-            for key, value in results.items():
-                if key not in ['suggested_position', 'current_zscore', 'p_value']:
-                    print(f"{key}: {value}")
-        
+        print(f"Confidence Level: {results.get('confidence_level', 'N/A')}")
+
         # Plot analysis if requested
         if plot_charts:
             analyzer.plot()

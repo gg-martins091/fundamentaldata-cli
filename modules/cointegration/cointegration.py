@@ -6,6 +6,24 @@ from statsmodels.tsa.stattools import adfuller, coint
 from sklearn.linear_model import LinearRegression
 #import seaborn as sns
 
+
+"""
+
+Minhas anotacoes pois vou esquecer.
+p_value < 0.05 mostra que a serie eh estacionaria, e consequentemente as series sao cointegradas.
+coint_t < crital_values[2] mostra 10% de significancia da cointegracao
+coint_t < crital_values[1] mostra 5% de significancia da cointegracao
+coint_t < crital_values[0] mostra 1% de significancia da cointegracao
+
+Do chat gpt:
+The critical values (at 99%, 95%, and 90%) are thresholds that determine whether the test statistic is extreme enough to reject H₀ at different confidence levels.
+If coint_t < crit_value[0] (99%) → Very strong rejection of H₀ → Very strong evidence of cointegration.
+If coint_t < crit_value[1] (95%) → Strong rejection of H₀ → Moderate evidence of cointegration.
+If coint_t < crit_value[2] (90%) → Weak rejection of H₀ → Weak evidence of cointegration.
+If coint_t > crit_value[2] (90%) → Fail to reject H₀ → No evidence of cointegration.
+
+The p-value is a probability-based decision tool, while coint_t vs. critical values provides a more detailed confidence-level-based interpretation. 🚀
+"""
 class CointegrationAnalyzer:
     def __init__(self, series1: pd.Series, series2: pd.Series, names: Tuple[str, str] = ('Series 1', 'Series 2'), transform_type='simple', debug: bool = False):
         """
@@ -33,7 +51,7 @@ class CointegrationAnalyzer:
         self.is_cointegrated = None
         self.p_value = None
         self.zscore = None
-        
+        self.confidence_level = None
     def analyze(self) -> dict:
         """
         Perform complete cointegration analysis.
@@ -43,15 +61,15 @@ class CointegrationAnalyzer:
         """
 
         # Run cointegration test
-        self.is_cointegrated, self.p_value = self.test_cointegration()
+        self.is_cointegrated, self.p_value, self.confidence_level = self.test_cointegration()
         
         # Calculate spread and z-score
         self.spread = self.calculate_spread()
         self.zscore = self.calculate_zscore()
         
         # Print spread statistics only if in debug mode
-        if self.debug:
-            self.print_spread_stats()
+        # if self.debug:
+        #   self.print_spread_stats()
         
         return self.get_summary_stats()
         
@@ -68,27 +86,37 @@ class CointegrationAnalyzer:
         spread = self.calculate_spread()
         adf_result = adfuller(spread)
         
-        if self.debug:
-            print(f"\nAugmented Dickey-Fuller Test Results: ({self.names[0]} vs {self.names[1]})")
-            print(f"ADF Statistic: {adf_result[0]}")
-            print(f"P-value: {adf_result[1]}")
-            print("Critical values:")
-            for key, value in adf_result[4].items():
-                print(f"\t{key}: {value}")
+        # if self.debug:
+        #     print(f"\nAugmented Dickey-Fuller Test Results: ({self.names[0]} vs {self.names[1]})")
+        #     print(f"ADF Statistic: {adf_result[0]}")
+        #     print(f"P-value: {adf_result[1]}")
+        #     print("Critical values:")
+        #     for key, value in adf_result[4].items():
+        #         print(f"\t{key}: {value}")
         
         # Run cointegration test
         coint_t, p_value, crit_value = coint(self.series1, self.series2)
-        is_cointegrated = p_value < 0.09
+        is_cointegrated = p_value < 0.10
         
         if self.debug:
             print(f"\nCointegration Test Results: ({self.names[0]} vs {self.names[1]})")
-            print(f"Cointegration t-stat: {coint_t}")
             print(f"P-value: {p_value}")
-            print(f"Critical values: {crit_value}")
             print(f"Beta: {self.beta}")
-            print(f"is_cointegrated: {is_cointegrated}")
-        
-        return is_cointegrated, p_value
+            print(f"Is cointegrated: {is_cointegrated}\n")
+            print(f"Cointegration t-stat: {coint_t} (should be compared to critical values)")
+            print(f"\t99%: {coint_t} < {crit_value[0]} ({coint_t < crit_value[0]})")
+            print(f"\t95%: {coint_t} < {crit_value[1]} ({coint_t < crit_value[1]})")
+            print(f"\t90%: {coint_t} < {crit_value[2]} ({coint_t < crit_value[2]})")
+            
+        confidence_level = "0%"
+        if coint_t < crit_value[0]:
+            confidence_level = "99%"
+        elif coint_t < crit_value[1]:
+            confidence_level = "95%"
+        elif coint_t < crit_value[2]:
+            confidence_level = "90%"
+            
+        return is_cointegrated, p_value, confidence_level
         
     def calculate_spread(self) -> pd.Series:
         """
@@ -143,7 +171,8 @@ class CointegrationAnalyzer:
                 'p_value': self.p_value,
                 'message': 'Series are not cointegrated',
                 'current_zscore': self.zscore.iloc[-1] if self.zscore is not None else None,
-                'suggested_position': self._suggest_position()
+                'suggested_position': self._suggest_position(),
+                'confidence_level': self.confidence_level
             }
 
         return {
@@ -153,7 +182,8 @@ class CointegrationAnalyzer:
             'spread_mean': self.spread.mean(),
             'spread_std': self.spread.std(),
             'current_zscore': self.zscore.iloc[-1],
-            'suggested_position': self._suggest_position()
+            'suggested_position': self._suggest_position(),
+            'confidence_level': self.confidence_level
         }
     
     def _suggest_position(self) -> str:
