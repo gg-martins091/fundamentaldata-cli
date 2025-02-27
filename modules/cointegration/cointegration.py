@@ -46,6 +46,10 @@ class CointegrationAnalyzer:
         
         # Apply transformations immediately
         self.series1, self.series2 = self.transform_series()
+
+        if debug:
+            print(self.series1)
+            print(self.series2)
         # Other initializations
         self.spread = None
         self.beta = None
@@ -81,9 +85,9 @@ class CointegrationAnalyzer:
         summary = self.get_summary_stats()
         if self.debug or (self.olp and summary.get('has_position', False)):
             print(f"\nCointegration Test Results: ({self.names[0]} vs {self.names[1]})")
-            print(f"P-value: {p_value}")
+            print(f"P-value: {self.p_value}")
             print(f"Beta: {self.beta}")
-            print(f"Is cointegrated: {is_cointegrated}\n")
+            print(f"Is cointegrated: {self.is_cointegrated}\n")
             print(f"Cointegration t-stat: {coint_t} (should be compared to critical values)")
             print(f"\t99%: {coint_t} < {crit_value[0]} ({coint_t < crit_value[0]})")
             print(f"\t95%: {coint_t} < {crit_value[1]} ({coint_t < crit_value[1]})")

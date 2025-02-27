@@ -127,7 +127,7 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
             print(f"Confidence Level: {results.get('confidence_level', 'N/A')}")
 
         # Plot analysis if requested
-        if plot_charts and results.get('has_position', False):
+        if plot_charts or (not olp and results.get('has_position', False)):
             analyzer.plot()
         
         # Plot spread if requested
@@ -210,6 +210,8 @@ if __name__ == "__main__":
     parser.add_argument('--plot', action='store_true', help='Plot z-score chart for analyzed pairs')
     parser.add_argument('-olp', action='store_true', help='Only logs pairs with position')
     parser.add_argument('--only-log-positions', action='store_true', help='Only logs pairs with position')
+    parser.add_argument('--period', type=int, default=200, help='Number of trading days to analyze (default: 200)')
+    parser.add_argument('-p', type=int, dest='period', help='Number of trading days to analyze (shorthand for --period)')
     args = parser.parse_args()
     
     # Create data directory if it doesn't exist
@@ -219,69 +221,69 @@ if __name__ == "__main__":
     # List of stocks to analyze
     brazilian_stocks = [
         'VALE3.SA',
-'WEGE3.SA',
-'PETR4.SA',
-'ABEV3.SA',
-'ITUB4.SA',
-'BBAS3.SA',
-'BBDC4.SA',
-'RADL3.SA',
-'B3SA3.SA',
-'LREN3.SA',
-'BPAC11.SA',
-'VIVT3.SA',
-'EMBR3.SA',
-'IRBR3.SA',
-'VBBR3.SA',
-'HAPV3.SA',
-'CSAN3.SA',
-'SUZB3.SA',
-'PETR3.SA',
-'ELET3.SA',
-'PRIO3.SA',
-'GGBR4.SA',
-'SBSP3.SA',
-'RENT3.SA',
-'RAIL3.SA',
-'NTCO3.SA',
-'TIMS3.SA',
-'EQTL3.SA',
-'BRFS3.SA',
-'ITSA4.SA',
-'MGLU3.SA',
-'CCRO3.SA',
-'CSNA3.SA',
-'KLBN11.SA',
-'JBSS3.SA',
-'BBSE3.SA',
-'AZUL4.SA',
-'TOTS3.SA',
-'MULT3.SA',
-'MRVE3.SA',
-'ASAI3.SA',
-'MRFG3.SA',
-'CPLE6.SA',
-'RDOR3.SA',
-'UGPA3.SA',
-'ONCO3.SA',
-'CMIG4.SA',
-'BBDC3.SA',
-'ENEV3.SA',
-'IGTI11.SA',
-'CRFB3.SA',
-'VIVA3.SA',
-'STBP3.SA',
-'BRAV3.SA',
-'HYPE3.SA',
-'AZZA3.SA',
-'PSSA3.SA',
-'SLCE3.SA',
-'ENGI11.SA',
-'AURE3.SA',
-'CPFE3.SA',
-'GOAU4.SA',
-'POMO4.SA',
-'CYRE3.SA',
+        'WEGE3.SA',
+        'PETR4.SA',
+        'ABEV3.SA',
+        'ITUB4.SA',
+        'BBAS3.SA',
+        'BBDC4.SA',
+        'RADL3.SA',
+        'B3SA3.SA',
+        'LREN3.SA',
+        'BPAC11.SA',
+        'VIVT3.SA',
+        'EMBR3.SA',
+        'IRBR3.SA',
+        'VBBR3.SA',
+        'HAPV3.SA',
+        'CSAN3.SA',
+        'SUZB3.SA',
+        'PETR3.SA',
+        'ELET3.SA',
+        'PRIO3.SA',
+        'GGBR4.SA',
+        'SBSP3.SA',
+        'RENT3.SA',
+        'RAIL3.SA',
+        'NTCO3.SA',
+        'TIMS3.SA',
+        'EQTL3.SA',
+        'BRFS3.SA',
+        'ITSA4.SA',
+        'MGLU3.SA',
+        'CCRO3.SA',
+        'CSNA3.SA',
+        'KLBN11.SA',
+        'JBSS3.SA',
+        'BBSE3.SA',
+        'AZUL4.SA',
+        'TOTS3.SA',
+        'MULT3.SA',
+        'MRVE3.SA',
+        'ASAI3.SA',
+        'MRFG3.SA',
+        'CPLE6.SA',
+        'RDOR3.SA',
+        'UGPA3.SA',
+        'ONCO3.SA',
+        'CMIG4.SA',
+        'BBDC3.SA',
+        'ENEV3.SA',
+        'IGTI11.SA',
+        'CRFB3.SA',
+        'VIVA3.SA',
+        'STBP3.SA',
+        'BRAV3.SA',
+        'HYPE3.SA',
+        'AZZA3.SA',
+        #'PSSA3.SA',
+        'SLCE3.SA',
+        'ENGI11.SA',
+        'AURE3.SA',
+        'CPFE3.SA',
+        'GOAU4.SA',
+        'POMO4.SA',
+        'CYRE3.SA',
     ]
     
     # EXAMPLE 1: Analyze a single pair using lookback period
@@ -306,21 +308,22 @@ if __name__ == "__main__":
     #     olp=args.olp or args.only_log_positions
     # )
     # analyze_pair_periods(
-    #     stock1='CPFE3.SA',
-    #     stock2='BBAS3.SA',
+    #     stock1='CCRO3.SA',
+    #     stock2='EQTL3.SA',
     #     end='2025-02-27',
     #     lookback_days=200,
     #     plot_charts=args.plot,
     #     debug=args.debug,
-    #     plot_spread=args.plot_spread
+    #     plot_spread=args.plot_spread,
     #     olp=args.olp or args.only_log_positions
     # )
   
     # EXAMPLE 3: Analyze all possible pairs from a list of stocks
     analyze_all_pairs(
-        stocks=brazilian_stocks,  # Just use the first 2 stocks for this example
+        # stocks=brazilian_stocks,  # Just use the first 2 stocks for this example
+        stocks=['BBAS3.SA', 'CPFE3.SA'],
         end='2025-02-27',
-        lookback_days=200,
+        lookback_days=args.period,
         plot_charts=args.plot,
         debug=args.debug,
         plot_spread=args.plot_spread,

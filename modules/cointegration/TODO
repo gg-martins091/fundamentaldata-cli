@@ -3,12 +3,20 @@
 #   analyze_all_pairs e analyze_pair_periods dao resultados diferentes para o mesmo par.
 #   entender pq quando roda analyze_pair_periods de embr3 e rent3 vai de 09-02 ate 02-25 e dps qnd roda o all_pairs roda 06-02 ate 02-25 e dps 09-02 ate 02-25 e entender tambem qual a diferenca disso
 #Adicionar a visualização do dickey fuller (teste de raiz unitária, quanto menor melhor)
-Melhorar a visualizacao (print) das informacoes da analise.
+#Melhorar a visualizacao (print) das informacoes da analise.
 Adicionar o grafico do historico do beta para visualizar a volatilidade relativa entre os ativos e a volatilidade do proprio beta.
-Fazer a analise de cointegração com diferentes intervalos de tempo.
+fazer a analise de cointegracao com mais ativos (ao inves de um par, pode ser 3, 4, 5 ativos em uma analise)
+
 Informacoes interessantes para entender e colocar na visualizacao:
-    cointegracao (porcentagem)
+    #cointegracao (porcentagem)
     coeficiente angular
     fisher information (o que é isso?)
 
 
+(ideias)
+backtest (integrar com bracktester?)
+    -> integrar isso com outras estrategias quant (simples) -> bracktester?
+
+
+(backlog)
+Fazer a analise de cointegração com diferentes intervalos de tempo (por enquanto pode ser feito com o analyze_pair_periods)
