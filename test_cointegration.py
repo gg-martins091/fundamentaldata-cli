@@ -125,6 +125,7 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
             print(f"Current Z-Score: {results.get('current_zscore', 'N/A')}")
             print(f"P-value: {results.get('p_value', 'N/A')}")
             print(f"Confidence Level: {results.get('confidence_level', 'N/A')}")
+            print(f"Beta: {results.get('beta', 'N/A')}")
 
         # Plot analysis if requested
         if plot_charts or (not olp and results.get('has_position', False)):
@@ -140,7 +141,115 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         print(f"Error analyzing pair: {e}")
         return None
 
-def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False, olp: bool = False, csv_output: str = None) -> List[dict]:
+def create_trade_simulation_entry(current_date: str, stock1: str, stock2: str, stock1_price: float, stock2_price: float, 
+                              pair_result: dict, beta: float) -> dict:
+    """
+    Create a trade simulation entry based on the suggested position.
+    
+    Args:
+        current_date: Current date in YYYY-MM-DD format
+        stock1: First stock ticker
+        stock2: Second stock ticker
+        stock1_price: Price of first stock
+        stock2_price: Price of second stock
+        pair_result: Dictionary containing analysis results
+        beta: Beta coefficient from regression
+        
+    Returns:
+        Dictionary containing trade simulation data
+    """
+    # Safely format numeric values
+    try:
+        p_value = round(float(pair_result.get('p_value', 0)), 4)
+    except (ValueError, TypeError):
+        p_value = pair_result.get('p_value', 'N/A')
+        
+    try:
+        zscore = round(float(pair_result.get('current_zscore', 0)), 2)
+    except (ValueError, TypeError):
+        zscore = pair_result.get('current_zscore', 'N/A')
+    
+    # Get suggested position
+    suggested_position = pair_result.get('suggested_position', '')
+    
+    # Default values
+    bought_ticker = None
+    bought_quantity = 0
+    bought_price = 0
+    sold_ticker = None
+    sold_quantity = 0
+    sold_price = 0
+    
+    # Parse the suggested position to determine which stock to buy and which to sell
+    # Format example: "Short STOCK1, Long 1.23x STOCK2"
+    if 'Short' in suggested_position and 'Long' in suggested_position:
+        # Extract stock names from the suggested position
+        stock1_name = stock1.replace('.SA', '')
+        stock2_name = stock2.replace('.SA', '')
+        
+        # Check which stock is mentioned with "Short" and which with "Long"
+        if f"Short {stock1_name}" in suggested_position:
+            # Short stock1, Long stock2
+            sold_ticker = stock1
+            sold_quantity = 1000  # Independent stock
+            sold_price = round(stock1_price, 2)
+            sold_amount = round(sold_quantity * sold_price, 2)
+            
+            bought_ticker = stock2
+            bought_quantity = int(1000 * beta)  # Dependent stock
+            bought_price = round(stock2_price, 2)
+            bought_amount = round(bought_quantity * bought_price, 2)
+        elif f"Long {stock1_name}" in suggested_position:
+            # Long stock1, Short stock2
+            bought_ticker = stock1
+            bought_quantity = 1000  # Independent stock
+            bought_price = round(stock1_price, 2)
+            bought_amount = round(bought_quantity * bought_price, 2)
+            
+            sold_ticker = stock2
+            sold_quantity = int(1000 * beta)  # Dependent stock
+            sold_price = round(stock2_price, 2)
+            sold_amount = round(sold_quantity * sold_price, 2)
+        elif f"Short {stock2_name}" in suggested_position:
+            # Short stock2, Long stock1
+            sold_ticker = stock2
+            sold_quantity = 1000  # Independent stock
+            sold_price = round(stock2_price, 2)
+            sold_amount = round(sold_quantity * sold_price, 2)
+            
+            bought_ticker = stock1
+            bought_quantity = int(1000 * beta)  # Dependent stock
+            bought_price = round(stock1_price, 2)
+            bought_amount = round(bought_quantity * bought_price, 2)
+        elif f"Long {stock2_name}" in suggested_position:
+            # Long stock2, Short stock1
+            bought_ticker = stock2
+            bought_quantity = 1000  # Independent stock
+            bought_price = round(stock2_price, 2)
+            bought_amount = round(bought_quantity * bought_price, 2)
+            
+            sold_ticker = stock1
+            sold_quantity = int(1000 * beta)  # Dependent stock
+            sold_price = round(stock1_price, 2)
+            sold_amount = round(sold_quantity * sold_price, 2)
+    
+    # Create the trade simulation entry
+    return {
+        'current_date': current_date,
+        'bought_ticker': bought_ticker.replace('.SA', '') if bought_ticker else 'N/A',
+        'bought_quantity': bought_quantity,
+        'bought_price': bought_price,
+        'bought_amount': bought_amount,
+        'sold_ticker': sold_ticker.replace('.SA', '') if sold_ticker else 'N/A',
+        'sold_quantity': sold_quantity,
+        'sold_price': sold_price,
+        'sold_amount': sold_amount,
+        'confidence_level': pair_result.get('confidence_level', 'N/A'),
+        'p_value': p_value,
+        'zscore': zscore
+    }
+
+def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False, olp: bool = False, csv_output: str = None, trade_simulations: str = None) -> List[dict]:
     """
     Analyze all possible pairs from a list of stocks.
     
@@ -153,6 +262,7 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
         plot_spread: Whether to plot the spread chart
         olp: Whether to only log pairs with positions
         csv_output: Path to output CSV file when olp is active
+        trade_simulations: Path to output trade simulations CSV file
         
     Returns:
         List of dictionaries with analysis results for each pair
@@ -163,6 +273,13 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
     
     results = []
     csv_data = []
+    trade_sim_data = []
+    
+    # Cache for the latest prices of each stock
+    latest_prices = {}
+    
+    # Get the current date
+    current_date = pd.Timestamp(end).strftime('%Y-%m-%d')
     
     # Analyze all possible pairs
     for i, stock1 in enumerate(stocks):
@@ -196,6 +313,40 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                         'confidence_level': pair_result.get('confidence_level', 'N/A'),
                         'beta': pair_result.get('beta', 'N/A')
                     })
+                    
+                # Add to trade simulations if requested and there's a position
+                if trade_simulations and pair_result.get('has_position', False):
+                    # Fetch or retrieve latest prices
+                    if stock1 not in latest_prices:
+                        stock1_data = get_stock_data(stock1, pd.Timestamp(end) - pd.Timedelta(days=10), end)
+                        latest_prices[stock1] = stock1_data.iloc[-1] if not stock1_data.empty else None
+                    
+                    if stock2 not in latest_prices:
+                        stock2_data = get_stock_data(stock2, pd.Timestamp(end) - pd.Timedelta(days=10), end)
+                        latest_prices[stock2] = stock2_data.iloc[-1] if not stock2_data.empty else None
+                    
+                    stock1_price = latest_prices[stock1]
+                    stock2_price = latest_prices[stock2]
+                    
+                    # Skip if price data is not available
+                    if stock1_price is None or stock2_price is None:
+                        continue
+                    
+                    # Get beta
+                    beta = pair_result.get('beta', 1.0)
+                    
+                    # Create trade simulation entry
+                    trade_entry = create_trade_simulation_entry(
+                        current_date=current_date,
+                        stock1=stock1,
+                        stock2=stock2,
+                        stock1_price=stock1_price,
+                        stock2_price=stock2_price,
+                        pair_result=pair_result,
+                        beta=beta
+                    )
+                    
+                    trade_sim_data.append(trade_entry)
 
             pair_result = analyze_pair_periods(
                 stock1=stock2, 
@@ -225,6 +376,40 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                         'confidence_level': pair_result.get('confidence_level', 'N/A'),
                         'beta': pair_result.get('beta', 'N/A')
                     })
+                
+                # Add to trade simulations if requested and there's a position
+                if trade_simulations and pair_result.get('has_position', False):
+                    # Fetch or retrieve latest prices
+                    if stock1 not in latest_prices:
+                        stock1_data = get_stock_data(stock1, pd.Timestamp(end) - pd.Timedelta(days=10), end)
+                        latest_prices[stock1] = stock1_data.iloc[-1] if not stock1_data.empty else None
+                    
+                    if stock2 not in latest_prices:
+                        stock2_data = get_stock_data(stock2, pd.Timestamp(end) - pd.Timedelta(days=10), end)
+                        latest_prices[stock2] = stock2_data.iloc[-1] if not stock2_data.empty else None
+                    
+                    stock1_price = latest_prices[stock1]
+                    stock2_price = latest_prices[stock2]
+                    
+                    # Skip if price data is not available
+                    if stock1_price is None or stock2_price is None:
+                        continue
+                    
+                    # Get beta
+                    beta = pair_result.get('beta', 1.0)
+                    
+                    # Create trade simulation entry
+                    trade_entry = create_trade_simulation_entry(
+                        current_date=current_date,
+                        stock1=stock2,  # Note: stock1 and stock2 are swapped here
+                        stock2=stock1,  # because we're analyzing the reverse pair
+                        stock1_price=stock2_price,
+                        stock2_price=stock1_price,
+                        pair_result=pair_result,
+                        beta=beta
+                    )
+                    
+                    trade_sim_data.append(trade_entry)
     
     # Write to CSV if olp is active and csv_output is provided
     if olp and csv_output and csv_data:
@@ -236,6 +421,19 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
             for row in csv_data:
                 writer.writerow(row)
         print(f"\nCointegration results with positions saved to {csv_output}")
+    
+    # Write trade simulations to CSV if requested
+    if trade_simulations and trade_sim_data:
+        import csv
+        with open(trade_simulations, 'w', newline='') as csvfile:
+            fieldnames = ['current_date', 'bought_ticker', 'bought_quantity', 'bought_price', 'bought_amount', 
+                          'sold_ticker', 'sold_quantity', 'sold_price', 'sold_amount', 
+                          'confidence_level', 'p_value', 'zscore']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in trade_sim_data:
+                writer.writerow(row)
+        print(f"\nTrade simulations saved to {trade_simulations}")
     
     return results
 
@@ -249,6 +447,8 @@ if __name__ == "__main__":
     parser.add_argument('-olp', action='store_true', help='Only logs pairs with position')
     parser.add_argument('--only-log-positions', action='store_true', help='Only logs pairs with position')
     parser.add_argument('--csv-output', dest='csv_output', type=str, help='Output cointegration results to a CSV file when positions found')
+    parser.add_argument('--trade-simulations', dest='trade_simulations', type=str, help='Output trade simulations to a CSV file')
+    parser.add_argument('-ts', dest='trade_simulations', type=str, help='Output trade simulations to a CSV file (shorthand for --trade-simulations)')
     parser.add_argument('--period', type=int, default=200, help='Number of trading days to analyze (default: 200)')
     parser.add_argument('-p', type=int, dest='period', help='Number of trading days to analyze (shorthand for --period)')
     args = parser.parse_args()
@@ -315,7 +515,6 @@ if __name__ == "__main__":
         'BRAV3.SA',
         'HYPE3.SA',
         'AZZA3.SA',
-        #'PSSA3.SA',
         'SLCE3.SA',
         'ENGI11.SA',
         'AURE3.SA',
@@ -360,14 +559,15 @@ if __name__ == "__main__":
     # EXAMPLE 3: Analyze all possible pairs from a list of stocks
     analyze_all_pairs(
         stocks=brazilian_stocks,  # Just use the first 2 stocks for this example
-        # stocks=['BBAS3.SA', 'CPFE3.SA'],
+        #stocks=['BBSE3.SA', 'NTCO3.SA'],
         end='2025-02-28',
         lookback_days=args.period,
         plot_charts=args.plot,
         debug=args.debug,
         plot_spread=args.plot_spread,
         olp=args.olp or args.only_log_positions,
-        csv_output=args.csv_output
+        csv_output=args.csv_output,
+        trade_simulations=args.trade_simulations
     )
     
     
