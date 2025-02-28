@@ -8,7 +8,6 @@ from sklearn.linear_model import LinearRegression
 
 
 """
-
 Minhas anotacoes pois vou esquecer.
 p_value < 0.05 mostra que a serie eh estacionaria, e consequentemente as series sao cointegradas.
 coint_t < crital_values[2] mostra 10% de significancia da cointegracao

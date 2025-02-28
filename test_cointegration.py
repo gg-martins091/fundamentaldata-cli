@@ -140,7 +140,7 @@ def analyze_pair_periods(stock1: str, stock2: str, end: str, lookback_days: int 
         print(f"Error analyzing pair: {e}")
         return None
 
-def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False, olp: bool = False) -> List[dict]:
+def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, plot_charts: bool = False, debug: bool = False, plot_spread: bool = False, olp: bool = False, csv_output: str = None) -> List[dict]:
     """
     Analyze all possible pairs from a list of stocks.
     
@@ -151,6 +151,8 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
         plot_charts: Whether to plot charts for each pair
         debug: Whether to print detailed statistics
         plot_spread: Whether to plot the spread chart
+        olp: Whether to only log pairs with positions
+        csv_output: Path to output CSV file when olp is active
         
     Returns:
         List of dictionaries with analysis results for each pair
@@ -160,6 +162,7 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
     print("-" * 50)
     
     results = []
+    csv_data = []
     
     # Analyze all possible pairs
     for i, stock1 in enumerate(stocks):
@@ -181,6 +184,18 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                     'stock2': stock2,
                     'results': pair_result
                 })
+                
+                # Add to CSV data if olp is active and there's a position
+                if olp and csv_output and pair_result.get('has_position', False):
+                    csv_data.append({
+                        'stock1': stock1.replace('.SA', ''),
+                        'stock2': stock2.replace('.SA', ''),
+                        'suggested_position': pair_result.get('suggested_position', 'N/A'),
+                        'current_zscore': pair_result.get('current_zscore', 'N/A'),
+                        'p_value': pair_result.get('p_value', 'N/A'),
+                        'confidence_level': pair_result.get('confidence_level', 'N/A'),
+                        'beta': pair_result.get('beta', 'N/A')
+                    })
 
             pair_result = analyze_pair_periods(
                 stock1=stock2, 
@@ -198,6 +213,29 @@ def analyze_all_pairs(stocks: List[str], end: str, lookback_days: int = None, pl
                     'stock2': stock1,
                     'results': pair_result
                 })
+                
+                # Add to CSV data if olp is active and there's a position
+                if olp and csv_output and pair_result.get('has_position', False):
+                    csv_data.append({
+                        'stock1': stock2.replace('.SA', ''),
+                        'stock2': stock1.replace('.SA', ''),
+                        'suggested_position': pair_result.get('suggested_position', 'N/A'),
+                        'current_zscore': pair_result.get('current_zscore', 'N/A'),
+                        'p_value': pair_result.get('p_value', 'N/A'),
+                        'confidence_level': pair_result.get('confidence_level', 'N/A'),
+                        'beta': pair_result.get('beta', 'N/A')
+                    })
+    
+    # Write to CSV if olp is active and csv_output is provided
+    if olp and csv_output and csv_data:
+        import csv
+        with open(csv_output, 'w', newline='') as csvfile:
+            fieldnames = ['stock1', 'stock2', 'suggested_position', 'current_zscore', 'p_value', 'confidence_level', 'beta']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in csv_data:
+                writer.writerow(row)
+        print(f"\nCointegration results with positions saved to {csv_output}")
     
     return results
 
@@ -210,6 +248,7 @@ if __name__ == "__main__":
     parser.add_argument('--plot', action='store_true', help='Plot z-score chart for analyzed pairs')
     parser.add_argument('-olp', action='store_true', help='Only logs pairs with position')
     parser.add_argument('--only-log-positions', action='store_true', help='Only logs pairs with position')
+    parser.add_argument('--csv-output', dest='csv_output', type=str, help='Output cointegration results to a CSV file when positions found')
     parser.add_argument('--period', type=int, default=200, help='Number of trading days to analyze (default: 200)')
     parser.add_argument('-p', type=int, dest='period', help='Number of trading days to analyze (shorthand for --period)')
     args = parser.parse_args()
@@ -320,14 +359,15 @@ if __name__ == "__main__":
   
     # EXAMPLE 3: Analyze all possible pairs from a list of stocks
     analyze_all_pairs(
-        # stocks=brazilian_stocks,  # Just use the first 2 stocks for this example
-        stocks=['BBAS3.SA', 'CPFE3.SA'],
-        end='2025-02-27',
+        stocks=brazilian_stocks,  # Just use the first 2 stocks for this example
+        # stocks=['BBAS3.SA', 'CPFE3.SA'],
+        end='2025-02-28',
         lookback_days=args.period,
         plot_charts=args.plot,
         debug=args.debug,
         plot_spread=args.plot_spread,
-        olp=args.olp or args.only_log_positions
+        olp=args.olp or args.only_log_positions,
+        csv_output=args.csv_output
     )
     
     
